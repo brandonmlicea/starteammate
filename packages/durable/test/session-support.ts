@@ -1,5 +1,5 @@
-import type { Context } from "@earendil-works/chord";
-import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
+import type { Context } from "@starteammate/chord";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import {
 	type CommitChange,
 	type CommitPublication,
@@ -14,7 +14,7 @@ import {
 	type Seq,
 	type Session,
 	type StorageWrite,
-} from "@earendil-works/pi-durable";
+} from "@starteammate/durable";
 import { type ObservedCommit, SessionImpl } from "../src/session/session.ts";
 
 export const context: Context = BACKGROUND_CONTEXT;

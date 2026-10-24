@@ -1,19 +1,19 @@
-import type { Context, JsonValue } from "@earendil-works/chord";
-import { withAbortSignal, withoutAbortSignal } from "@earendil-works/chord/context";
-import type { Models } from "@earendil-works/pi-ai";
+import type { Context, JsonValue } from "@starteammate/chord";
+import { withAbortSignal, withoutAbortSignal } from "@starteammate/chord/context";
+import type { Models } from "@starteammate/ai";
 import {
 	type ClientIdentity,
 	mergeClientIdentity,
-	PI_ATTRIBUTION,
+	STARTEAMMATE_ATTRIBUTION,
 	withClientIdentity,
-} from "@earendil-works/pi-ai/utils/identity";
+} from "@starteammate/ai/utils/identity";
 import {
 	createTypedMetrics,
 	NOOP_TELEMETRY_CONTEXT,
 	NOOP_TELEMETRY_METRICS,
 	type SpanAttributes,
 	type TelemetryContext,
-} from "@earendil-works/pi-telemetry";
+} from "@starteammate/telemetry";
 import { ResetEntry } from "../entries.ts";
 import type { ExecutionEnv } from "../env/index.ts";
 import { contained, SessionImpl } from "../session/session.ts";
@@ -101,7 +101,7 @@ type ConversationHost<Tool extends ToolRegistration> = {
 };
 
 /** Key of the Harness's internal index-size getter, for tests. */
-export const SCHEDULER_INDEX_SIZES = Symbol.for("pi-durable.schedulerIndexSizes");
+export const SCHEDULER_INDEX_SIZES = Symbol.for("starteammate-durable.schedulerIndexSizes");
 
 class ConversationImpl<Tool extends ToolRegistration> implements Conversation {
 	readonly id: ConversationId;
@@ -181,8 +181,8 @@ class ConversationImpl<Tool extends ToolRegistration> implements Conversation {
 	}
 }
 
-/** Request identity of a Harness's model requests: pi-ai's defaults with provider attribution to pi. */
-export const DEFAULT_HARNESS_IDENTITY: ClientIdentity = { attribution: PI_ATTRIBUTION };
+/** Request identity of a Harness's model requests: starteammate-ai's defaults with provider attribution to starteammate. */
+export const DEFAULT_HARNESS_IDENTITY: ClientIdentity = { attribution: STARTEAMMATE_ATTRIBUTION };
 
 /**
  * `HarnessOptions.models` as a function with `HarnessOptions.identity` applied. A plain `Models` is wrapped once; a
@@ -268,7 +268,7 @@ class HarnessImpl<Tool extends ToolRegistration> extends SessionImpl implements 
 		};
 	}
 
-	/** Resolve a conversation's committed `pi.agent` against `snapshot`, or the current one, and the current settings. */
+	/** Resolve a conversation's committed `starteammate.agent` against `snapshot`, or the current one, and the current settings. */
 	async resolveAgent(
 		id: ConversationId,
 		snapshot: RegistrySnapshot<Tool> | undefined,
@@ -356,7 +356,7 @@ class HarnessImpl<Tool extends ToolRegistration> extends SessionImpl implements 
 		return this.#tasks.waitForIdle(undefined, context);
 	}
 
-	/** Sum every conversation's committed `pi.usage`. Each document is read at its own point; totals only grow. */
+	/** Sum every conversation's committed `starteammate.usage`. Each document is read at its own point; totals only grow. */
 	async usage(context: Context): Promise<UsageState> {
 		const conversations = await this.readOnLine(() =>
 			scanAll((cursor) => this.storage.scanConversations({}, SCAN_PAGE_SIZE, cursor, context)),
@@ -419,8 +419,8 @@ class HarnessImpl<Tool extends ToolRegistration> extends SessionImpl implements 
 	}
 
 	/**
-	 * The built-in creation hook, in every commit that creates or forks a conversation: empty `pi.live`, `pi.inbox`, and
-	 * `pi.usage`, a fresh `pi.provider`, the conversation's `pi.agent` (see `createAgent()`), then
+	 * The built-in creation hook, in every commit that creates or forks a conversation: empty `starteammate.live`, `starteammate.inbox`, and
+	 * `starteammate.usage`, a fresh `starteammate.provider`, the conversation's `starteammate.agent` (see `createAgent()`), then
 	 * `HarnessOptions.conversationCreated`.
 	 */
 	protected override async conversationCreated(tx: Transaction, record: ConversationRecord): Promise<void> {
@@ -439,7 +439,7 @@ function safeReport(
 	telemetry: TelemetryContext,
 ): (error: unknown, info: ReportInfo, context?: Context) => void {
 	const reports = createTypedMetrics(telemetry.metrics ?? NOOP_TELEMETRY_METRICS, [DURABLE_TELEMETRY_SCHEMA]).counter(
-		"pi.durable.reports",
+		"starteammate.durable.reports",
 	);
 	return (error, info, context) => {
 		contained(
@@ -468,7 +468,7 @@ function safeReport(
 				break;
 		}
 		reports.add(1, { type: info.type });
-		context?.telemetry.addEvent("pi.durable.report", attributes);
+		context?.telemetry.addEvent("starteammate.durable.report", attributes);
 	};
 }
 

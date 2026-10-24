@@ -1,12 +1,12 @@
-// Triage agent on pi-durable: one durable conversation per issue. Results and decisions live in a durable document,
+// Triage agent on starteammate-durable: one durable conversation per issue. Results and decisions live in a durable document,
 // so a restart resumes unfinished triage runs and keeps every decision.
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import { type ModelThinkingLevel, StringEnum, Type } from "@earendil-works/pi-ai";
-import { createModels } from "@earendil-works/pi-ai/models";
-import { anthropicProvider } from "@earendil-works/pi-ai/providers/anthropic";
-import { openaiCodexProvider } from "@earendil-works/pi-ai/providers/openai-codex";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
+import { type ModelThinkingLevel, StringEnum, Type } from "@starteammate/ai";
+import { createModels } from "@starteammate/ai/models";
+import { anthropicProvider } from "@starteammate/ai/providers/anthropic";
+import { openaiCodexProvider } from "@starteammate/ai/providers/openai-codex";
 import { AuthStorage } from "../../packages/coding-agent/src/core/auth-storage.ts";
 import {
 	type ConversationId,

@@ -1,15 +1,15 @@
 import { setFlagsFromString } from "node:v8";
 import { runInNewContext } from "node:vm";
-import type { Context } from "@earendil-works/chord";
+import type { Context } from "@starteammate/chord";
 import {
 	BACKGROUND_CONTEXT,
 	createContextKey,
 	withAbortSignal,
 	withCancel,
 	withContextValue,
-} from "@earendil-works/chord/context";
-import { applyImmutable } from "@earendil-works/chord/delta";
-import { type DocumentWatch, defineDoc, MemoryStorage } from "@earendil-works/pi-durable";
+} from "@starteammate/chord/context";
+import { applyImmutable } from "@starteammate/chord/delta";
+import { type DocumentWatch, defineDoc, MemoryStorage } from "@starteammate/durable";
 import { describe, expect, it } from "vitest";
 import { SessionImpl } from "../src/session/session.ts";
 import { context, documentChanges, flush, openTestSession } from "./session-support.ts";

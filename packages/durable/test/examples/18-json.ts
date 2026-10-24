@@ -1,4 +1,4 @@
-// JSON mode: stream one prompt's run as JSON lines, like `pi --mode json`. Two modes:
+// JSON mode: stream one prompt's run as JSON lines, like `starteammate --mode json`. Two modes:
 //   --events (default): the experimental agent events of watchEvents(), starting with a `snapshot` event.
 //   --ops: the raw ConversationView frames, starting with the view itself; each later line holds one commit's ops.
 // --storage sqlite (default) | jsonl | memory: sqlite writes a temporary database file, jsonl a temporary directory;
@@ -9,10 +9,10 @@
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import { createModels } from "@earendil-works/pi-ai/models";
-import { fauxAssistantMessage, fauxProvider, fauxText, fauxToolCall } from "@earendil-works/pi-ai/providers/faux";
-import { openaiProvider } from "@earendil-works/pi-ai/providers/openai";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
+import { createModels } from "@starteammate/ai/models";
+import { fauxAssistantMessage, fauxProvider, fauxText, fauxToolCall } from "@starteammate/ai/providers/faux";
+import { openaiProvider } from "@starteammate/ai/providers/openai";
 import { NodeExecutionEnv } from "../../src/env/node.ts";
 import {
 	createRegistry,
@@ -39,10 +39,10 @@ const prompt =
 let storage: Storage;
 let location: string | undefined;
 if (storageKind === "sqlite") {
-	location = join(tmpdir(), `pi-durable-json-${Date.now()}.sqlite`);
+	location = join(tmpdir(), `starteammate-durable-json-${Date.now()}.sqlite`);
 	storage = await openNodeSqliteStorage(location);
 } else if (storageKind === "jsonl") {
-	location = await mkdtemp(join(tmpdir(), "pi-durable-json-"));
+	location = await mkdtemp(join(tmpdir(), "starteammate-durable-json-"));
 	storage = await openNodeJsonlStorage(location, context);
 } else if (storageKind === "memory") {
 	storage = new MemoryStorage();

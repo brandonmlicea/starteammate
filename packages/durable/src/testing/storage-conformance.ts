@@ -1,6 +1,6 @@
-import type { JsonValue } from "@earendil-works/chord";
-import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import type { Op } from "@earendil-works/chord/delta";
+import type { JsonValue } from "@starteammate/chord";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
+import type { Op } from "@starteammate/chord/delta";
 import { idFromNumber } from "../ids.ts";
 import {
 	type ConversationId,

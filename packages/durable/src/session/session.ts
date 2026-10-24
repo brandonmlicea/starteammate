@@ -1,6 +1,6 @@
-import { type Context, type JsonValue, Watch } from "@earendil-works/chord";
-import { awaitWithContext, BACKGROUND_CONTEXT, withoutAbortSignal } from "@earendil-works/chord/context";
-import { type Op, PendingOps, track } from "@earendil-works/chord/delta";
+import { type Context, type JsonValue, Watch } from "@starteammate/chord";
+import { awaitWithContext, BACKGROUND_CONTEXT, withoutAbortSignal } from "@starteammate/chord/context";
+import { type Op, PendingOps, track } from "@starteammate/chord/delta";
 import {
 	type AnyDocToken,
 	addressId,
@@ -960,7 +960,7 @@ export class SessionImpl implements Session {
 		for (const write of writes) {
 			switch (write.type) {
 				case "entry":
-					context.telemetry.addEvent("pi.durable.entry", {
+					context.telemetry.addEvent("starteammate.durable.entry", {
 						"entry.id": write.value.id,
 						"entry.kind": write.value.kind,
 					});
@@ -968,7 +968,7 @@ export class SessionImpl implements Session {
 					break;
 				case "submission":
 					if (write.value.status === "done" || write.value.status === "unanswered") {
-						context.telemetry.addEvent("pi.durable.submission", {
+						context.telemetry.addEvent("starteammate.durable.submission", {
 							"submission.id": write.value.id,
 							status: write.value.status,
 							"answer.entry_id": write.value.answer,

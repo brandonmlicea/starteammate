@@ -6,7 +6,7 @@ import {
 	type EntryId,
 	type StorageWrite,
 	type TaskId,
-} from "@earendil-works/pi-durable";
+} from "@starteammate/durable";
 import { describe, expect, it } from "vitest";
 import {
 	context,

@@ -1,5 +1,5 @@
-import type { Context } from "@earendil-works/chord";
-import { defineDoc, MemoryStorage, type Seq, type StorageWrite } from "@earendil-works/pi-durable";
+import type { Context } from "@starteammate/chord";
+import { defineDoc, MemoryStorage, type Seq, type StorageWrite } from "@starteammate/durable";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SessionImpl } from "../src/session/session.ts";
 import { Transaction } from "../src/session/transaction.ts";

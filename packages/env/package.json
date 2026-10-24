@@ -1,7 +1,7 @@
 {
-	"name": "@earendil-works/pi-env",
+	"name": "@starteammate/env",
 	"version": "1.4.0",
-	"description": "Remote execution environments for Pi Durable: a small daemon deployed over SSH and its ExecutionEnv client",
+	"description": "Remote execution environments for Starteammate Durable: a small daemon deployed over SSH and its ExecutionEnv client",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -38,15 +38,15 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/earendil-works/pi.git",
+		"url": "git+https://github.com/brandonmlicea/starteammate.git",
 		"directory": "packages/env"
 	},
 	"engines": {
 		"node": ">=22.19.0"
 	},
 	"dependencies": {
-		"@earendil-works/chord": "1.4.0",
-		"@earendil-works/pi-durable": "1.4.0"
+		"@starteammate/chord": "1.4.0",
+		"@starteammate/durable": "1.4.0"
 	},
 	"devDependencies": {
 		"shx": "0.3.4",

@@ -1,8 +1,8 @@
 /// <reference lib="dom" />
 
-import type { Context, JsonValue } from "@earendil-works/chord";
-import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
-import { registerStorageConformance } from "@earendil-works/pi-durable/testing";
+import type { Context, JsonValue } from "@starteammate/chord";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
+import { registerStorageConformance } from "@starteammate/durable/testing";
 import { IDBKeyRange as FakeIDBKeyRange, IDBFactory } from "fake-indexeddb";
 import { describe, expect, it } from "vitest";
 import { idFromNumber } from "../src/ids.ts";

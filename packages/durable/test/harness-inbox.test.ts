@@ -1,7 +1,7 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Op } from "@earendil-works/chord/delta";
+import type { Op } from "@starteammate/chord/delta";
 import {
 	type AssistantMessage,
 	type FauxResponseStep,
@@ -11,7 +11,7 @@ import {
 	type ToolResultMessage,
 	Type,
 	type Usage,
-} from "@earendil-works/pi-ai";
+} from "@starteammate/ai";
 import {
 	type Conversation,
 	defineDoc,
@@ -29,7 +29,7 @@ import {
 	type ToolExecutionResult,
 	ToolTask,
 	UsageDoc,
-} from "@earendil-works/pi-durable";
+} from "@starteammate/durable";
 import { afterEach, describe, expect, it } from "vitest";
 import { recordUsage } from "../src/harness/usage.ts";
 import { openNodeSqliteStorage } from "../src/storage/sqlite/node.ts";
@@ -99,7 +99,7 @@ async function status(submission: Submission): Promise<SubmissionRecord> {
 /** Kind and text of each entry, skipping system entries. */
 function transcript(entries: readonly EntryRecord[]): string[] {
 	return entries
-		.filter((entry) => entry.kind !== "pi.system")
+		.filter((entry) => entry.kind !== "starteammate.system")
 		.map((entry) => {
 			const message = entry.model?.[0];
 			const text = message?.role === "toolResult" ? undefined : textOf(message);
@@ -132,20 +132,20 @@ describe("inbox", () => {
 			[write.id, "write"],
 			[f2.id, "followUp"],
 		]);
-		expect(transcript(await allEntries(root))).toEqual(["pi.user:a"]);
+		expect(transcript(await allEntries(root))).toEqual(["starteammate.user:a"]);
 
 		first.release();
 		await f2.wait(context);
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant:first",
+			"starteammate.user:a",
+			"starteammate.assistant:first",
 			"note:w",
-			"pi.user:f1",
-			"pi.assistant:second",
-			"pi.user:f2",
-			"pi.assistant:third",
+			"starteammate.user:f1",
+			"starteammate.assistant:second",
+			"starteammate.user:f2",
+			"starteammate.assistant:third",
 		]);
-		const answers = (await allEntries(root)).filter((entry) => entry.kind === "pi.assistant");
+		const answers = (await allEntries(root)).filter((entry) => entry.kind === "starteammate.assistant");
 		expect(await status(input)).toMatchObject({ status: "done", answer: answers[0]!.id });
 		expect(await status(write)).toMatchObject({ status: "done" });
 		expect(await status(f1)).toMatchObject({ status: "done", answer: answers[1]!.id });
@@ -169,11 +169,11 @@ describe("inbox", () => {
 		const settled = await f2.wait(context);
 		expect(await status(f1)).toEqual({ ...settled, id: f1.id, entry: expect.any(Number) });
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant:first",
-			"pi.user:f1",
-			"pi.user:f2",
-			"pi.assistant:both",
+			"starteammate.user:a",
+			"starteammate.assistant:first",
+			"starteammate.user:f1",
+			"starteammate.user:f2",
+			"starteammate.assistant:both",
 		]);
 		expect(setup.faux.state.callCount).toBe(2);
 		await harness.close(context);
@@ -227,15 +227,15 @@ describe("inbox", () => {
 		gate.resolve();
 		await followUp.wait(context);
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.user:s",
-			"pi.assistant:after tools",
-			"pi.user:f",
-			"pi.assistant:follow-up",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.user:s",
+			"starteammate.assistant:after tools",
+			"starteammate.user:f",
+			"starteammate.assistant:follow-up",
 		]);
-		const answers = (await allEntries(root)).filter((entry) => entry.kind === "pi.assistant");
+		const answers = (await allEntries(root)).filter((entry) => entry.kind === "starteammate.assistant");
 		expect(await status(input)).toMatchObject({ status: "done", answer: answers[1]!.id });
 		expect(await status(steer)).toMatchObject({ status: "done", answer: answers[1]!.id });
 		expect(await status(followUp)).toMatchObject({ status: "done", answer: answers[2]!.id });
@@ -257,12 +257,12 @@ describe("inbox", () => {
 		await followUp.wait(context);
 		expect(await status(input)).toMatchObject({ status: "unanswered", reason: "reset" });
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset",
-			"pi.user:f",
-			"pi.assistant:fresh",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset",
+			"starteammate.user:f",
+			"starteammate.assistant:fresh",
 		]);
 		const reset = (await allEntries(root)).find((entry) => ResetEntry.is(entry))!;
 		expect(reset.head).toBe(reset.id);
@@ -284,7 +284,7 @@ describe("inbox", () => {
 		await input.wait(context);
 		await harness.waitForIdle(context);
 		expect(await status(input)).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(root))).toEqual(["pi.user:a", "pi.assistant:first", "pi.reset:handoff"]);
+		expect(transcript(await allEntries(root))).toEqual(["starteammate.user:a", "starteammate.assistant:first", "starteammate.reset:handoff"]);
 		expect((await root.context(context)).messages).toEqual([
 			{ role: "user", content: "handoff", timestamp: expect.any(Number) },
 		]);
@@ -298,7 +298,7 @@ describe("inbox", () => {
 		await root.commit((tx) => tx.appendEntry(root.id, { kind: "note" }), context);
 		await root.reset(undefined, context);
 		let view = await root.context(context);
-		expect(view.head?.kind).toBe("pi.reset");
+		expect(view.head?.kind).toBe("starteammate.reset");
 		expect(view.head?.model).toBeUndefined();
 		expect(view.messages).toEqual([]);
 		await root.reset("carry on", context);
@@ -328,7 +328,7 @@ describe("inbox", () => {
 
 		// The fresh summary's marker starts the range at the reset: a target inside the range is not stale, even when
 		// it is older than the marker itself. A reset placed earlier in the same boundary makes it stale.
-		const inside = (await allEntries(root)).find((entry) => entry.kind === "pi.user")!;
+		const inside = (await allEntries(root)).find((entry) => entry.kind === "starteammate.user")!;
 		const second = await root.submit({ type: "input", content: "b" }, context);
 		const kept = await root.submit({ type: "write", entry: { kind: "summary", head: inside.id } }, context);
 		await second.wait(context);
@@ -364,11 +364,11 @@ describe("inbox", () => {
 		const entries = await allEntries(root);
 		expect(settled).toMatchObject({ status: "done", answer: entries.at(-1)!.id });
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:continue here",
-			"pi.assistant:after handoff",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:continue here",
+			"starteammate.assistant:after handoff",
 		]);
 		const reset = entries.find((entry) => ResetEntry.is(entry))!;
 		expect(reset.head).toBe(reset.id);
@@ -393,13 +393,13 @@ describe("inbox", () => {
 		await input.wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:continue here",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:continue here",
 			"note:w",
-			"pi.user:s",
-			"pi.assistant:after handoff",
+			"starteammate.user:s",
+			"starteammate.assistant:after handoff",
 		]);
 		expect(requests).toEqual([["system:", "user:continue here", "user:w", "user:s"]]);
 		for (const submission of [input, steer]) {
@@ -427,15 +427,15 @@ describe("inbox", () => {
 		await followUp.wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:continue here",
-			"pi.assistant:after handoff",
-			"pi.user:f",
-			"pi.assistant:follow-up",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:continue here",
+			"starteammate.assistant:after handoff",
+			"starteammate.user:f",
+			"starteammate.assistant:follow-up",
 		]);
-		const answers = entries.filter((entry) => entry.kind === "pi.assistant");
+		const answers = entries.filter((entry) => entry.kind === "starteammate.assistant");
 		expect(await status(input)).toMatchObject({ status: "done", answer: answers[1]!.id });
 		expect(await status(followUp)).toMatchObject({ status: "done", answer: answers[2]!.id });
 		await harness.close(context);
@@ -456,13 +456,13 @@ describe("inbox", () => {
 		await followUp.wait(context);
 		expect(await status(input)).toMatchObject({ status: "unanswered", reason: "reset" });
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:continue here",
-			"pi.reset",
-			"pi.user:f",
-			"pi.assistant:fresh",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:continue here",
+			"starteammate.reset",
+			"starteammate.user:f",
+			"starteammate.assistant:fresh",
 		]);
 		expect(requests).toEqual([["system:", "user:f"]]);
 		expect(setup.faux.state.callCount).toBe(2);
@@ -486,14 +486,14 @@ describe("inbox", () => {
 		const settled = await (await root.submit({ type: "input", content: "a" }, context)).wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:h1",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.reset:h2",
-			"pi.assistant:done",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:h1",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:h2",
+			"starteammate.assistant:done",
 		]);
 		expect(settled).toMatchObject({ status: "done", answer: entries.at(-1)!.id });
 		const messages = (await root.context(context)).messages;
@@ -514,9 +514,9 @@ describe("inbox", () => {
 		const { harness, root } = await openChat(new MemoryStorage(), setup);
 		const settled = await (await root.submit({ type: "input", content: "a" }, context)).wait(context);
 		const entries = await allEntries(root);
-		const calling = entries.find((entry) => entry.kind === "pi.assistant")!;
+		const calling = entries.find((entry) => entry.kind === "starteammate.assistant")!;
 		expect(settled).toMatchObject({ status: "done", answer: calling.id });
-		expect(transcript(entries)).toEqual(["pi.user:a", "pi.assistant", "pi.tool-result", "pi.reset:continue here"]);
+		expect(transcript(entries)).toEqual(["starteammate.user:a", "starteammate.assistant", "starteammate.tool-result", "starteammate.reset:continue here"]);
 		expect(setup.faux.state.callCount).toBe(1);
 		expect(await harness.snapshot(LiveDoc, root.id, context)).toEqual({});
 		await harness.close(context);
@@ -536,10 +536,10 @@ describe("inbox", () => {
 		await followUp.wait(context);
 		expect(await status(input)).toMatchObject({ status: "done" });
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant:first",
-			"pi.user:f",
-			"pi.assistant:second",
+			"starteammate.user:a",
+			"starteammate.assistant:first",
+			"starteammate.user:f",
+			"starteammate.assistant:second",
 		]);
 		await harness.close(context);
 	});
@@ -582,16 +582,16 @@ describe("inbox", () => {
 		await g.wait(context);
 		expect(await status(f)).toMatchObject({ status: "done" });
 		expect(transcript(await allEntries(root)).slice(-4)).toEqual([
-			"pi.user:f",
-			"pi.assistant:for f",
-			"pi.user:g",
-			"pi.assistant:for g",
+			"starteammate.user:f",
+			"starteammate.assistant:for f",
+			"starteammate.user:g",
+			"starteammate.assistant:for g",
 		]);
 		await harness.close(context);
 	});
 
 	it("keeps queued submissions across reopen and settles them afterwards", async () => {
-		const directory = await mkdtemp(join(tmpdir(), "pi-durable-inbox-"));
+		const directory = await mkdtemp(join(tmpdir(), "starteammate-durable-inbox-"));
 		directories.add(directory);
 		const path = join(directory, "session.sqlite");
 		const setup = chatSetup();
@@ -606,7 +606,7 @@ describe("inbox", () => {
 		opened = await openChat(await openNodeSqliteStorage(path), setup);
 		const settled = await (await opened.harness.submission(f, context))!.wait(context);
 		expect(settled).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(opened.root)).slice(-2)).toEqual(["pi.user:f", "pi.assistant:f"]);
+		expect(transcript(await allEntries(opened.root)).slice(-2)).toEqual(["starteammate.user:f", "starteammate.assistant:f"]);
 		await opened.harness.close(context);
 	});
 
@@ -618,7 +618,7 @@ describe("inbox", () => {
 		const ops: Op[][] = [];
 		harness.subscribeCommits((publication) => {
 			for (const change of documentChanges(publication)) {
-				if (change.record.kind === "pi.inbox" && change.ops.length > 0) ops.push([...change.ops]);
+				if (change.record.kind === "starteammate.inbox" && change.ops.length > 0) ops.push([...change.ops]);
 			}
 		});
 		const input = await root.submit({ type: "input", content: "a" }, context);
@@ -684,11 +684,11 @@ describe("inbox", () => {
 		await input.wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant:first",
+			"starteammate.user:a",
+			"starteammate.assistant:first",
 			"note:w",
-			"pi.user:more",
-			"pi.assistant:second",
+			"starteammate.user:more",
+			"starteammate.assistant:second",
 		]);
 		expect(await status(input)).toMatchObject({ status: "done", answer: entries.at(-1)!.id });
 		expect(await status(write)).toMatchObject({ status: "done" });
@@ -708,7 +708,7 @@ describe("inbox", () => {
 		await input.wait(context);
 		await harness.waitForIdle(context);
 		expect(await status(input)).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(root))).toEqual(["pi.user:a", "pi.assistant:first", "pi.reset"]);
+		expect(transcript(await allEntries(root))).toEqual(["starteammate.user:a", "starteammate.assistant:first", "starteammate.reset"]);
 		expect(setup.faux.state.callCount).toBe(1);
 		await harness.close(context);
 	});
@@ -729,16 +729,16 @@ describe("inbox", () => {
 		await f.wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.user:s1",
-			"pi.user:s2",
-			"pi.assistant:after tools",
-			"pi.user:f",
-			"pi.assistant:follow-up",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.user:s1",
+			"starteammate.user:s2",
+			"starteammate.assistant:after tools",
+			"starteammate.user:f",
+			"starteammate.assistant:follow-up",
 		]);
-		const answers = entries.filter((entry) => entry.kind === "pi.assistant");
+		const answers = entries.filter((entry) => entry.kind === "starteammate.assistant");
 		for (const submission of [input, s1, s2]) {
 			expect(await status(submission)).toMatchObject({ status: "done", answer: answers[1]!.id });
 		}
@@ -759,7 +759,7 @@ describe("inbox", () => {
 		const steer = await root.submit({ type: "input", content: "s", whenBusy: "steer" }, context);
 		const settled = await steer.wait(context);
 		expect(await status(f)).toMatchObject({ status: "done", answer: settled.status === "done" && settled.answer });
-		expect(transcript(await allEntries(root)).slice(-3)).toEqual(["pi.user:f", "pi.user:s", "pi.assistant:both"]);
+		expect(transcript(await allEntries(root)).slice(-3)).toEqual(["starteammate.user:f", "starteammate.user:s", "starteammate.assistant:both"]);
 		await harness.close(context);
 	});
 
@@ -774,14 +774,14 @@ describe("inbox", () => {
 		const f = await root.submit({ type: "input", content: "f" }, context);
 		gate.resolve();
 		await f.wait(context);
-		const calling = (await allEntries(root)).find((entry) => entry.kind === "pi.assistant")!;
+		const calling = (await allEntries(root)).find((entry) => entry.kind === "starteammate.assistant")!;
 		expect(await status(input)).toMatchObject({ status: "done", answer: calling.id });
 		expect(transcript(await allEntries(root))).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.user:f",
-			"pi.assistant:follow-up",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.user:f",
+			"starteammate.assistant:follow-up",
 		]);
 		await harness.close(context);
 	});
@@ -818,16 +818,16 @@ describe("inbox", () => {
 		await f.wait(context);
 		const entries = await allEntries(root);
 		expect(transcript(entries)).toEqual([
-			"pi.user:a",
-			"pi.assistant",
-			"pi.tool-result",
-			"pi.tool-result",
-			"pi.reset:two",
-			"pi.assistant:after handoff",
-			"pi.user:f",
-			"pi.assistant:follow-up",
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.tool-result",
+			"starteammate.reset:two",
+			"starteammate.assistant:after handoff",
+			"starteammate.user:f",
+			"starteammate.assistant:follow-up",
 		]);
-		const answers = entries.filter((entry) => entry.kind === "pi.assistant");
+		const answers = entries.filter((entry) => entry.kind === "starteammate.assistant");
 		expect(await status(input)).toMatchObject({ status: "done", answer: answers[1]!.id });
 		await harness.close(context);
 	});
@@ -875,7 +875,7 @@ describe("inbox", () => {
 		const ops: Op[][] = [];
 		harness.subscribeCommits((publication) => {
 			for (const change of documentChanges(publication)) {
-				if (change.record.kind === "pi.inbox" && change.ops.length > 0) ops.push([...change.ops]);
+				if (change.record.kind === "starteammate.inbox" && change.ops.length > 0) ops.push([...change.ops]);
 			}
 		});
 		await items[1]!.abort(context);
@@ -911,7 +911,7 @@ describe("inbox", () => {
 		const { harness, root } = await openChat(new RecordingStorage(), setup);
 		harness.subscribeCommits((publication) => {
 			for (const change of documentChanges(publication))
-				if (change.record.kind === "pi.inbox") inboxId = change.record.id;
+				if (change.record.kind === "starteammate.inbox") inboxId = change.record.id;
 		});
 		const input = await root.submit({ type: "input", content: "a" }, context);
 		await first.reached;
@@ -957,7 +957,7 @@ describe("usage", () => {
 		await (await root.submit({ type: "input", content: "a" }, context)).wait(context);
 		const entries = await allEntries(root);
 		const assistants = entries.flatMap((entry) =>
-			entry.kind === "pi.assistant" ? [entry.model![0] as AssistantMessage] : [],
+			entry.kind === "starteammate.assistant" ? [entry.model![0] as AssistantMessage] : [],
 		);
 		const expected = assistants.reduce(
 			(sum, message) => ({
@@ -970,7 +970,7 @@ describe("usage", () => {
 		const usage = (await harness.snapshot(UsageDoc, root.id, context))!;
 		expect(usage.models["faux/faux-1"]).toMatchObject(expected);
 		expect(usage.tools).toEqual({ hold: spent });
-		const result = entries.find((entry) => entry.kind === "pi.tool-result")!.model![0] as ToolResultMessage;
+		const result = entries.find((entry) => entry.kind === "starteammate.tool-result")!.model![0] as ToolResultMessage;
 		expect(result.usage).toEqual(spent);
 
 		// A fork starts at zero; the Session total adds every conversation once.
@@ -1011,7 +1011,7 @@ describe("usage", () => {
 		await harness.abortTask((await harness.snapshot(LiveDoc, root.id, context))!.run!.taskId, context);
 		await input.wait(context);
 		const assistants = (await allEntries(root)).flatMap((entry) =>
-			entry.kind === "pi.assistant" ? [entry.model![0] as AssistantMessage] : [],
+			entry.kind === "starteammate.assistant" ? [entry.model![0] as AssistantMessage] : [],
 		);
 		expect(assistants.map((message) => message.stopReason)).toEqual(["error", "toolUse", "stop", "aborted"]);
 		const output = assistants.reduce((sum, message) => sum + message.usage.output, 0);
@@ -1041,7 +1041,7 @@ describe("usage", () => {
 	});
 
 	it("keeps usage totals exact across reopen, counting a partial converted after reopen once", async () => {
-		const directory = await mkdtemp(join(tmpdir(), "pi-durable-usage-"));
+		const directory = await mkdtemp(join(tmpdir(), "starteammate-durable-usage-"));
 		directories.add(directory);
 		const path = join(directory, "session.sqlite");
 		const setup = chatSetup({ tokensPerSecond: 200, tokenSize: { min: 1, max: 1 } });
@@ -1059,7 +1059,7 @@ describe("usage", () => {
 		opened.harness.resume();
 		await opened.harness.waitForIdle(context);
 		const assistants = (await allEntries(opened.root)).flatMap((entry) =>
-			entry.kind === "pi.assistant" ? [entry.model![0] as AssistantMessage] : [],
+			entry.kind === "starteammate.assistant" ? [entry.model![0] as AssistantMessage] : [],
 		);
 		expect(assistants.map((message) => message.stopReason)).toEqual(["stop", "aborted", "stop"]);
 		const total = (await opened.harness.usage(context)).models["faux/faux-1"]!;
@@ -1076,7 +1076,7 @@ describe("usage", () => {
 		const commits: { entries: number; ops: readonly Op[] }[] = [];
 		harness.subscribeCommits((publication) => {
 			for (const change of documentChanges(publication)) {
-				if (change.record.kind !== "pi.usage") continue;
+				if (change.record.kind !== "starteammate.usage") continue;
 				const entries = publication.changes.filter((other) => other.type === "entry").length;
 				commits.push({ entries, ops: change.ops });
 			}

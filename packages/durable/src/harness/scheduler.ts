@@ -1,14 +1,14 @@
-import { type Context, copyJson, type JsonValue } from "@earendil-works/chord";
-import { awaitWithContext, withAbortSignal, withoutAbortSignal, withTelemetry } from "@earendil-works/chord/context";
-import { ownedSlice } from "@earendil-works/chord/delta";
-import type { Models } from "@earendil-works/pi-ai";
+import { type Context, copyJson, type JsonValue } from "@starteammate/chord";
+import { awaitWithContext, withAbortSignal, withoutAbortSignal, withTelemetry } from "@starteammate/chord/context";
+import { ownedSlice } from "@starteammate/chord/delta";
+import type { Models } from "@starteammate/ai";
 import {
 	createTypedMetrics,
 	createTypedSpanStarter,
 	NOOP_TELEMETRY_CONTEXT,
 	NOOP_TELEMETRY_METRICS,
 	type TelemetryCarrier,
-} from "@earendil-works/pi-telemetry";
+} from "@starteammate/telemetry";
 import type { ExecutionEnv } from "../env/index.ts";
 import { errorMessage, ReadOnlySession } from "../errors.ts";
 import type { ObservedCommit, SessionImpl } from "../session/session.ts";
@@ -354,8 +354,8 @@ export class TaskScheduler {
 	constructor(options: TaskSchedulerOptions) {
 		this.#telemetry = options.telemetry ?? NOOP_TELEMETRY_CONTEXT;
 		const metrics = createTypedMetrics(this.#telemetry.metrics ?? NOOP_TELEMETRY_METRICS, [DURABLE_TELEMETRY_SCHEMA]);
-		this.#activeMetric = metrics.upDownCounter("pi.durable.tasks.active");
-		this.#durationMetric = metrics.histogram("pi.durable.phase.duration");
+		this.#activeMetric = metrics.upDownCounter("starteammate.durable.tasks.active");
+		this.#durationMetric = metrics.histogram("starteammate.durable.phase.duration");
 		this.#session = options.session;
 		this.#storage = options.storage;
 		this.#registry = options.registry;
@@ -1763,7 +1763,7 @@ export class TaskScheduler {
 		const attempt = checkpoint.attempt;
 		const resumed = this.#resumed.delete(task.id);
 		return createTypedSpanStarter(parent, [DURABLE_TELEMETRY_SCHEMA])(
-			"pi.durable.phase",
+			"starteammate.durable.phase",
 			{
 				"task.id": task.id,
 				"task.name": task.kind,
@@ -2162,7 +2162,7 @@ export class TaskScheduler {
 					options,
 				);
 				if (checkpoint !== undefined) {
-					invocation.context.telemetry.addEvent("pi.durable.checkpoint", {
+					invocation.context.telemetry.addEvent("starteammate.durable.checkpoint", {
 						phase: checkpoint,
 					});
 				}

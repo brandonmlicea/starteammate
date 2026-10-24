@@ -1,7 +1,7 @@
-import type { Context, Draft, JsonValue, WatchHandle } from "@earendil-works/chord";
-import type { Op } from "@earendil-works/chord/delta";
-import type { Message, Models } from "@earendil-works/pi-ai";
-import type { TelemetryCarrier } from "@earendil-works/pi-telemetry";
+import type { Context, Draft, JsonValue, WatchHandle } from "@starteammate/chord";
+import type { Op } from "@starteammate/chord/delta";
+import type { Message, Models } from "@starteammate/ai";
+import type { TelemetryCarrier } from "@starteammate/telemetry";
 import type { ExecutionEnv } from "./env/index.ts";
 import type {
 	Agent,

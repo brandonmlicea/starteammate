@@ -22,24 +22,24 @@
  *   toggled the tool output open (via ctrl+e or clicking)
  *
  * Usage:
- *   pi -e ./built-in-tool-renderer.ts
+ *   starteammate -e ./built-in-tool-renderer.ts
  */
 
-import type { BashToolDetails, EditToolDetails, ExtensionAPI, ReadToolDetails } from "@earendil-works/pi-coding-agent";
+import type { BashToolDetails, EditToolDetails, ExtensionAPI, ReadToolDetails } from "starteammate";
 import {
 	createBashToolDefinition,
 	createEditToolDefinition,
 	createReadToolDefinition,
 	createWriteToolDefinition,
-} from "@earendil-works/pi-coding-agent";
-import { Text } from "@earendil-works/pi-tui";
+} from "starteammate";
+import { Text } from "@starteammate/tui";
 
-export default function (pi: ExtensionAPI) {
+export default function (starteammate: ExtensionAPI) {
 	const cwd = process.cwd();
 
 	// --- Read tool: show path and line count ---
 	const originalRead = createReadToolDefinition(cwd);
-	pi.registerTool({
+	starteammate.registerTool({
 		...originalRead,
 
 		renderCall(args, theme, _context) {
@@ -91,7 +91,7 @@ export default function (pi: ExtensionAPI) {
 
 	// --- Bash tool: show command and exit code ---
 	const originalBash = createBashToolDefinition(cwd);
-	pi.registerTool({
+	starteammate.registerTool({
 		...originalBash,
 
 		renderCall(args, theme, _context) {
@@ -143,7 +143,7 @@ export default function (pi: ExtensionAPI) {
 
 	// --- Edit tool: show path and diff stats ---
 	const originalEdit = createEditToolDefinition(cwd);
-	pi.registerTool({
+	starteammate.registerTool({
 		...originalEdit,
 
 		renderCall(args, theme, _context) {
@@ -200,7 +200,7 @@ export default function (pi: ExtensionAPI) {
 
 	// --- Write tool: show path and size ---
 	const originalWrite = createWriteToolDefinition(cwd);
-	pi.registerTool({
+	starteammate.registerTool({
 		...originalWrite,
 
 		renderCall(args, theme, _context) {

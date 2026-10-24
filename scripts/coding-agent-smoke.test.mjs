@@ -17,14 +17,14 @@ function writePackage(directory, manifest, files) {
 }
 
 function createFixture(t, { importUndeclared = false } = {}) {
-	const temporaryRoot = mkdtempSync(join(tmpdir(), "pi-coding-agent-smoke-test-"));
+	const temporaryRoot = mkdtempSync(join(tmpdir(), "starteammate-coding-agent-smoke-test-"));
 	t.after(() => rmSync(temporaryRoot, { recursive: true, force: true }));
 	const root = join(temporaryRoot, "fixture with spaces");
 	const repoRoot = join(root, "repo");
 	mkdirSync(repoRoot, { recursive: true });
 	writeFileSync(join(repoRoot, "package.json"), '{"name":"fixture","private":true}\n');
 	writePackage(
-		join(repoRoot, "packages", codingAgentName.split("/")[1]),
+		join(repoRoot, "packages", codingAgentName.split("/").at(-1)),
 		{
 			name: codingAgentName,
 			version: "1.0.0",
@@ -33,7 +33,7 @@ function createFixture(t, { importUndeclared = false } = {}) {
 			types: "./dist/index.d.ts",
 			exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
 			files: ["dist"],
-			bin: { pi: "dist/bundle/cli.js" },
+			bin: { starteammate: "dist/bundle/cli.js" },
 		},
 		{
 			"dist/index.js": `${importUndeclared ? 'import "@earendil-works/undeclared";' : ""}
