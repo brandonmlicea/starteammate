@@ -66,7 +66,9 @@ function environment(name: string, value: string): string[] {
 
 export function requireEvalAuthFile(provider: string): string {
 	const path = join(
-		process.env.STARTEAMMATE_CODING_AGENT_DIR ? resolve(process.env.STARTEAMMATE_CODING_AGENT_DIR) : join(homedir(), ".starteammate", "agent"),
+		process.env.STARTEAMMATE_CODING_AGENT_DIR
+			? resolve(process.env.STARTEAMMATE_CODING_AGENT_DIR)
+			: join(homedir(), ".starteammate", "agent"),
 		"auth.json",
 	);
 	if (!existsSync(path) || !statSync(path).isFile())
@@ -118,7 +120,10 @@ function dockerArgs(
 			...environment("STARTEAMMATE_EVAL_ARTIFACT_GID", String(process.getgid())),
 		);
 	}
-	args.push("--mount", `type=bind,source=${context.authPath},target=/run/starteammate-eval-secrets/auth.json,readonly`);
+	args.push(
+		"--mount",
+		`type=bind,source=${context.authPath},target=/run/starteammate-eval-secrets/auth.json,readonly`,
+	);
 	args.push(context.images[variant].name, ...entrypointArgs);
 	return args;
 }

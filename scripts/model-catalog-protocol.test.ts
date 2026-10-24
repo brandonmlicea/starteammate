@@ -75,7 +75,10 @@ test("redirects Starteammate user agents to an explicit catalog version", () => 
 
 test("serves explicit and unversioned catalog requests without redirecting", () => {
 	assert.deepEqual(
-		parseModelCatalogRequest("https://pi.dev/api/models?starteammate-version=0.83.0", "starteammate/0.85.1 (linux; node/v22.0.0; x64)"),
+		parseModelCatalogRequest(
+			"https://pi.dev/api/models?starteammate-version=0.83.0",
+			"starteammate/0.85.1 (linux; node/v22.0.0; x64)",
+		),
 		{ kind: "catalog", starteammateVersion: "0.83.0", representation: "legacy" },
 	);
 	assert.deepEqual(parseModelCatalogRequest("https://pi.dev/api/models?types=chat", "curl/8.0.0"), {
@@ -114,7 +117,11 @@ test("validates stored indexes and drops publication metadata", () => {
 	assert.throws(() => parseModelCatalogIndex({ ...index, schemaVersion: 2 }), /index is invalid/);
 	assert.throws(() => parseModelCatalogIndex({ ...index, defaultRevision: `sha256-${"c".repeat(64)}` }), /invalid/);
 	assert.throws(
-		() => parseModelCatalogIndex({ ...index, catalogs: [{ minimumStarteammateVersion: "latest", revision: legacyRevision }] }),
+		() =>
+			parseModelCatalogIndex({
+				...index,
+				catalogs: [{ minimumStarteammateVersion: "latest", revision: legacyRevision }],
+			}),
 		/invalid/,
 	);
 });

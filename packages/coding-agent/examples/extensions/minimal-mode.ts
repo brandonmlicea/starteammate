@@ -16,6 +16,8 @@
  * Then use ctrl+o to toggle between minimal (collapsed) and full (expanded) views.
  */
 
+import { Text } from "@starteammate/tui";
+import { homedir } from "os";
 import type { ExtensionAPI } from "starteammate";
 import {
 	createBashToolDefinition,
@@ -27,8 +29,6 @@ import {
 	createWriteToolDefinition,
 	formatReadLineRange,
 } from "starteammate";
-import { Text } from "@starteammate/tui";
-import { homedir } from "os";
 
 /**
  * Shorten a path by replacing home directory with ~

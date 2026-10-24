@@ -4,12 +4,13 @@
 // Uses OpenAI when OPENAI_API_KEY is set, and a scripted faux model otherwise.
 // Run from packages/durable:
 //   node --conditions=source --experimental-strip-types test/examples/21-subagent-foreground.ts
-import type { Context } from "@starteammate/chord";
-import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
+
 import { type AssistantMessage, type FauxResponseStep, Type } from "@starteammate/ai";
 import { createModels } from "@starteammate/ai/models";
 import { fauxAssistantMessage, fauxProvider, fauxText, fauxToolCall } from "@starteammate/ai/providers/faux";
 import { openaiProvider } from "@starteammate/ai/providers/openai";
+import type { Context } from "@starteammate/chord";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import {
 	type AgentEvent,
 	AssistantEntry,

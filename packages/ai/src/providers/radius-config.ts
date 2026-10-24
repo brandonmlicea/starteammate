@@ -59,7 +59,10 @@ export function getRadiusCredentialConfig(credential: OAuthCredential | undefine
 	return sanitizeRadiusGatewayConfig((credential as RadiusOAuthCredential | undefined)?.gatewayConfig);
 }
 
-export function getRadiusModelsFromConfig(providerId: string, config: RadiusGatewayConfig): Model<"starteammate-messages">[] {
+export function getRadiusModelsFromConfig(
+	providerId: string,
+	config: RadiusGatewayConfig,
+): Model<"starteammate-messages">[] {
 	return config.models.map((model) => ({
 		...model,
 		api: "starteammate-messages",
@@ -68,7 +71,10 @@ export function getRadiusModelsFromConfig(providerId: string, config: RadiusGate
 	}));
 }
 
-export function getRadiusModels(providerId: string, credential: OAuthCredential | undefined): Model<"starteammate-messages">[] {
+export function getRadiusModels(
+	providerId: string,
+	credential: OAuthCredential | undefined,
+): Model<"starteammate-messages">[] {
 	const config = getRadiusCredentialConfig(credential);
 	return config ? getRadiusModelsFromConfig(providerId, config) : [];
 }

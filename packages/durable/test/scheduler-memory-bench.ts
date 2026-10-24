@@ -9,8 +9,8 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT as context } from "@starteammate/chord/context";
 import { createModels } from "@starteammate/ai/models";
+import { BACKGROUND_CONTEXT as context } from "@starteammate/chord/context";
 import { SCHEDULER_INDEX_SIZES } from "../src/harness/harness.ts";
 import {
 	type ConversationId,

@@ -23,7 +23,12 @@ describe("resolveModelSelection", () => {
 	});
 
 	it("uses trimmed environment defaults", () => {
-		expect(resolveModelSelection(undefined, { STARTEAMMATE_PROVIDER: " openai-codex ", STARTEAMMATE_MODEL: " gpt-5.6-sol " })).toEqual({
+		expect(
+			resolveModelSelection(undefined, {
+				STARTEAMMATE_PROVIDER: " openai-codex ",
+				STARTEAMMATE_MODEL: " gpt-5.6-sol ",
+			}),
+		).toEqual({
 			provider: "openai-codex",
 			id: "gpt-5.6-sol",
 		});
@@ -97,10 +102,12 @@ describe("documentation variant", () => {
 		});
 		const stripped = excludeStarteammateDocumentation(prompt);
 
-		expect(verifySystemPrompt(stripped, { name: "without_docs", expectedStarteammateDocumentation: false })).toBe(stripped);
-		expect(() => verifySystemPrompt(prompt, { name: "without_docs", expectedStarteammateDocumentation: false })).toThrow(
-			"does not match",
+		expect(verifySystemPrompt(stripped, { name: "without_docs", expectedStarteammateDocumentation: false })).toBe(
+			stripped,
 		);
+		expect(() =>
+			verifySystemPrompt(prompt, { name: "without_docs", expectedStarteammateDocumentation: false }),
+		).toThrow("does not match");
 	});
 
 	it("fails closed when prompt markers are missing", () => {

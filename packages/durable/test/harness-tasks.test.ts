@@ -1,6 +1,6 @@
+import { createModels, Type } from "@starteammate/ai";
 import type { Context } from "@starteammate/chord";
 import { withAbortSignal, withCancel } from "@starteammate/chord/context";
-import { createModels, Type } from "@starteammate/ai";
 import {
 	type Conversation,
 	createRegistry,

@@ -303,7 +303,9 @@ describe("AgentSession codemode tool", () => {
 			parameters: Type.Object({}),
 			execute: async () => ({ content: [{ type: "text", text: "ran" }], details: {}, usage: usage(100, 0.25) }),
 		};
-		const harness = await setup([(starteammate) => starteammate.registerTool(createToolDefinitionFromAgentTool(billedTool))]);
+		const harness = await setup([
+			(starteammate) => starteammate.registerTool(createToolDefinitionFromAgentTool(billedTool)),
+		]);
 		harness.setResponses([
 			fauxAssistantMessage(
 				[
@@ -339,7 +341,9 @@ describe("AgentSession codemode tool", () => {
 						: undefined,
 				);
 				// A later handler that only touches details keeps what the first one set.
-				starteammate.on("tool_result", (event) => (event.toolName === "stats" ? { details: { audited: true } } : undefined));
+				starteammate.on("tool_result", (event) =>
+					event.toolName === "stats" ? { details: { audited: true } } : undefined,
+				);
 			},
 		]);
 		harness.setResponses([

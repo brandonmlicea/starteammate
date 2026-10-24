@@ -65,7 +65,10 @@ export const AI_TELEMETRY_SCHEMA = defineTelemetrySchema({
 	version: 1,
 	spans: {
 		"starteammate.ai.request": request,
-		"starteammate.ai.poll": { ...request, description: "One deferred-response poll, not the deferred request's lifetime." },
+		"starteammate.ai.poll": {
+			...request,
+			description: "One deferred-response poll, not the deferred request's lifetime.",
+		},
 	},
 	metrics: {
 		"starteammate.ai.request.duration": {

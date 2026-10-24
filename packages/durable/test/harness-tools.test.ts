@@ -1,7 +1,6 @@
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { JsonValue } from "@starteammate/chord";
 import {
 	type AssistantMessage,
 	type FauxResponseStep,
@@ -13,6 +12,7 @@ import {
 	type ToolResultMessage,
 	Type,
 } from "@starteammate/ai";
+import type { JsonValue } from "@starteammate/chord";
 import {
 	AgentDoc,
 	type Conversation,
@@ -198,7 +198,8 @@ describe("tool round", () => {
 		const second = await (await first.root.submit({ type: "input", content: "again" }, context)).wait(context);
 		expect(second.status).toBe("done");
 		let entries = await allEntries(first.root);
-		const removal = entries.filter((entry) => entry.kind === "starteammate.system").at(-1)!.model![0] as SystemMessage;
+		const removal = entries.filter((entry) => entry.kind === "starteammate.system").at(-1)!
+			.model![0] as SystemMessage;
 		expect(removal.toolsRemoved).toEqual([{ name: "echo" }]);
 		expect(results(entries)[0]).toMatchObject({ isError: true });
 		// The stored agent is not rewritten; the tool is only not resolved.
@@ -208,7 +209,8 @@ describe("tool round", () => {
 		setup.faux.setResponses([DONE]);
 		await (await first.root.submit({ type: "input", content: "back" }, context)).wait(context);
 		entries = await allEntries(first.root);
-		const addition = entries.filter((entry) => entry.kind === "starteammate.system").at(-1)!.model![0] as SystemMessage;
+		const addition = entries.filter((entry) => entry.kind === "starteammate.system").at(-1)!
+			.model![0] as SystemMessage;
 		expect(addition.toolsAdded?.map((declared) => declared.name)).toEqual(["echo"]);
 		await first.harness.close(context);
 	});
@@ -720,7 +722,12 @@ describe("generation hooks", () => {
 		expect(status).toBe("done");
 		expect(requests[0]!.slice(-2)).toEqual(["user:go", "user:injected"]);
 		expect(responses).toEqual(["answer 1", "answer 2"]);
-		expect(entries.map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.assistant", "starteammate.user", "starteammate.assistant"]);
+		expect(entries.map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+			"starteammate.user",
+			"starteammate.assistant",
+		]);
 		// The injected message was used for the request only.
 		expect(entries.some((entry) => textOf(entry.model?.[0]) === "injected")).toBe(false);
 		await harness.close(context);
@@ -792,7 +799,9 @@ describe("generation hooks", () => {
 			fauxAssistantMessage([fauxText("c")]),
 		]);
 		// The first continuation skips the second handler; on the next answer the second handler's continuation wins.
-		const users = entries.filter((entry) => entry.kind === "starteammate.user").map((entry) => textOf(entry.model![0]));
+		const users = entries
+			.filter((entry) => entry.kind === "starteammate.user")
+			.map((entry) => textOf(entry.model![0]));
 		expect(users).toEqual(["go", "first", "second"]);
 		expect(called.filter((name) => name === "second onYield")).toHaveLength(2);
 		expect(called.filter((name) => name === "next observer")).toHaveLength(3);

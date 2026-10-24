@@ -6,9 +6,9 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { createModels } from "@starteammate/ai/models";
 import { fauxAssistantMessage, fauxProvider, fauxToolCall } from "@starteammate/ai/providers/faux";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { NodeExecutionEnv } from "../../src/env/node.ts";
 import { createRegistry, defineDoc, Harness, MemoryStorage } from "../../src/index.ts";
 import { CodingTools } from "../../src/tools/index.ts";

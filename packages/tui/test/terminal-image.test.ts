@@ -227,12 +227,21 @@ describe("detectCapabilities", () => {
 
 	it("applies environment overrides", () => {
 		assert.deepStrictEqual(
-			withEnv({ STARTEAMMATE_HYPERLINKS: "1", STARTEAMMATE_IMAGE_PROTOCOL: "kitty", STARTEAMMATE_TRUE_COLOR: "1" }, () => detectCapabilities()),
+			withEnv(
+				{ STARTEAMMATE_HYPERLINKS: "1", STARTEAMMATE_IMAGE_PROTOCOL: "kitty", STARTEAMMATE_TRUE_COLOR: "1" },
+				() => detectCapabilities(),
+			),
 			{ images: "kitty", trueColor: true, hyperlinks: true },
 		);
 		assert.deepStrictEqual(
-			withEnv({ TERM_PROGRAM: "iterm.app", STARTEAMMATE_HYPERLINKS: "0", STARTEAMMATE_IMAGE_PROTOCOL: "none", STARTEAMMATE_TRUE_COLOR: "0" }, () =>
-				detectCapabilities(),
+			withEnv(
+				{
+					TERM_PROGRAM: "iterm.app",
+					STARTEAMMATE_HYPERLINKS: "0",
+					STARTEAMMATE_IMAGE_PROTOCOL: "none",
+					STARTEAMMATE_TRUE_COLOR: "0",
+				},
+				() => detectCapabilities(),
 			),
 			{ images: null, trueColor: false, hyperlinks: false },
 		);
@@ -254,17 +263,20 @@ describe("detectCapabilities", () => {
 	});
 
 	it("applies and clears programmatic overrides", () => {
-		withEnv({ STARTEAMMATE_HYPERLINKS: "1", STARTEAMMATE_IMAGE_PROTOCOL: "kitty", STARTEAMMATE_TRUE_COLOR: "1" }, () => {
-			setCapabilityOverrides({ images: null, trueColor: false, hyperlinks: false });
-			try {
-				assert.deepStrictEqual(getCapabilities(), { images: null, trueColor: false, hyperlinks: false });
-				setCapabilityOverrides({});
-				assert.deepStrictEqual(getCapabilities(), { images: "kitty", trueColor: true, hyperlinks: true });
-			} finally {
-				setCapabilityOverrides({});
-				resetCapabilitiesCache();
-			}
-		});
+		withEnv(
+			{ STARTEAMMATE_HYPERLINKS: "1", STARTEAMMATE_IMAGE_PROTOCOL: "kitty", STARTEAMMATE_TRUE_COLOR: "1" },
+			() => {
+				setCapabilityOverrides({ images: null, trueColor: false, hyperlinks: false });
+				try {
+					assert.deepStrictEqual(getCapabilities(), { images: null, trueColor: false, hyperlinks: false });
+					setCapabilityOverrides({});
+					assert.deepStrictEqual(getCapabilities(), { images: "kitty", trueColor: true, hyperlinks: true });
+				} finally {
+					setCapabilityOverrides({});
+					resetCapabilitiesCache();
+				}
+			},
+		);
 	});
 
 	it("bypasses the tmux probe when hyperlinks are overridden", () => {

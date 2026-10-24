@@ -310,7 +310,11 @@ export class InMemoryTelemetryContext
 		const span = carrier?.["starteammate-memory-span"];
 		const traceId = carrier?.["starteammate-memory-trace"];
 		if (typeof scope !== "string" || typeof span !== "string" || typeof traceId !== "string") return this;
-		const context = { "starteammate-memory-scope": scope, "starteammate-memory-span": span, "starteammate-memory-trace": traceId };
+		const context = {
+			"starteammate-memory-scope": scope,
+			"starteammate-memory-span": span,
+			"starteammate-memory-trace": traceId,
+		};
 		const localId = scope === this.state.scope ? Number(span) : null;
 		const parent: TelemetryContext = {
 			metrics: this,

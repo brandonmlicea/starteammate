@@ -4,16 +4,8 @@
  * Escape in editor returns to options, Escape in options cancels
  */
 
+import { Editor, type EditorTheme, Key, matchesKey, Text, visibleWidth, wrapTextWithAnsi } from "@starteammate/tui";
 import type { ExtensionAPI } from "starteammate";
-import {
-	Editor,
-	type EditorTheme,
-	Key,
-	matchesKey,
-	Text,
-	visibleWidth,
-	wrapTextWithAnsi,
-} from "@starteammate/tui";
 import { Type } from "typebox";
 
 interface OptionWithDesc {

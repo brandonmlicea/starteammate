@@ -778,7 +778,9 @@ export function createMcpExtension(options: McpExtensionOptions = {}): Extension
 					.map((tool) => tool.name),
 			);
 			const tools = serverTools.get(server.entry.name) ?? new Set<string>();
-			starteammate.setActiveTools(starteammate.getActiveTools().filter((name) => !tools.has(name) || !indirect.has(name)));
+			starteammate.setActiveTools(
+				starteammate.getActiveTools().filter((name) => !tools.has(name) || !indirect.has(name)),
+			);
 			emitChange();
 			return undefined;
 		};

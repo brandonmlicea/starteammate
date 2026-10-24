@@ -1246,7 +1246,8 @@ describe("owned conversations from tools and supervisors", () => {
 		opened.harness.resume();
 		expect((await opened.harness.waitForTask(children[1]!, context)).state.outcome.status).toBe("aborted");
 		expect((await (await opened.harness.submission(second, context))!.wait(context)).status).toBe("done");
-		const tools = (await opened.harness.commit((tx) => tx.scanTasks({ kind: "starteammate.tool" }, 10), context)).items;
+		const tools = (await opened.harness.commit((tx) => tx.scanTasks({ kind: "starteammate.tool" }, 10), context))
+			.items;
 		expect(tools.map((task) => task.state.status === "terminal" && task.state.outcome.status)).toEqual([
 			"failed",
 			"failed",

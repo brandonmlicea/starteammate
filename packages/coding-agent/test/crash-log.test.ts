@@ -25,7 +25,10 @@ describe("extension crash attribution", () => {
 			"npm:starteammate-observational-memory",
 			"/home/fedora/.starteammate/agent/npm/node_modules/starteammate-observational-memory",
 		);
-		const unrelated = packageExtension("npm:unrelated", "/home/fedora/.starteammate/agent/npm/node_modules/unrelated");
+		const unrelated = packageExtension(
+			"npm:unrelated",
+			"/home/fedora/.starteammate/agent/npm/node_modules/unrelated",
+		);
 		const stack =
 			"TypeError: Cannot read properties of undefined (reading 'runtime')\n" +
 			"    at streamSimple (file:///home/fedora/.local/lib/node_modules/starteammate/dist/bundle/chunks/chunk-CMRUVXTE.js:1093:16944)\n" +

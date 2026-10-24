@@ -746,21 +746,27 @@ describe("InteractiveMode.showLoadedResources", () => {
 			},
 			{
 				path: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts",
-				sourceInfo: createSourceInfo("/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts", {
-					source: "npm:starteammate-markdown-preview",
-					scope: "project",
-					origin: "package",
-					baseDir: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview",
-				}),
+				sourceInfo: createSourceInfo(
+					"/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts",
+					{
+						source: "npm:starteammate-markdown-preview",
+						scope: "project",
+						origin: "package",
+						baseDir: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview",
+					},
+				),
 			},
 			{
 				path: "/tmp/project/.starteammate/npm/node_modules/@scope/starteammate-scoped/extensions/index.ts",
-				sourceInfo: createSourceInfo("/tmp/project/.starteammate/npm/node_modules/@scope/starteammate-scoped/extensions/index.ts", {
-					source: "npm:@scope/starteammate-scoped",
-					scope: "project",
-					origin: "package",
-					baseDir: "/tmp/project/.starteammate/npm/node_modules/@scope/starteammate-scoped",
-				}),
+				sourceInfo: createSourceInfo(
+					"/tmp/project/.starteammate/npm/node_modules/@scope/starteammate-scoped/extensions/index.ts",
+					{
+						source: "npm:@scope/starteammate-scoped",
+						scope: "project",
+						origin: "package",
+						baseDir: "/tmp/project/.starteammate/npm/node_modules/@scope/starteammate-scoped",
+					},
+				),
 			},
 			{
 				path: "/tmp/project/.starteammate/git/github.com/HazAT/starteammate-interactive-subagents/extensions/index.ts",
@@ -1126,12 +1132,15 @@ describe("InteractiveMode.showLoadedResources", () => {
 		const extensions: ExtensionFixture[] = [
 			{
 				path: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts",
-				sourceInfo: createSourceInfo("/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts", {
-					source: "npm:starteammate-markdown-preview",
-					scope: "project",
-					origin: "package",
-					baseDir: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview",
-				}),
+				sourceInfo: createSourceInfo(
+					"/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview/extensions/index.ts",
+					{
+						source: "npm:starteammate-markdown-preview",
+						scope: "project",
+						origin: "package",
+						baseDir: "/tmp/project/.starteammate/npm/node_modules/starteammate-markdown-preview",
+					},
+				),
 			},
 		];
 
@@ -1263,7 +1272,10 @@ describe("InteractiveMode.showLoadedResources", () => {
 		const fakeThis = createShowLoadedResourcesThis({
 			quietStartup: false,
 			cwd,
-			contextFiles: [{ path: path.join(home, ".starteammate", "agent", "AGENTS.md") }, { path: path.join(cwd, "AGENTS.md") }],
+			contextFiles: [
+				{ path: path.join(home, ".starteammate", "agent", "AGENTS.md") },
+				{ path: path.join(cwd, "AGENTS.md") },
+			],
 		});
 
 		(InteractiveMode as any).prototype.showLoadedResources.call(fakeThis, {
@@ -1302,7 +1314,10 @@ describe("InteractiveMode.showLoadedResources", () => {
 			quietStartup: false,
 			toolOutputExpanded: true,
 			cwd,
-			contextFiles: [{ path: path.join(home, ".starteammate", "agent", "AGENTS.md") }, { path: path.join(cwd, "AGENTS.md") }],
+			contextFiles: [
+				{ path: path.join(home, ".starteammate", "agent", "AGENTS.md") },
+				{ path: path.join(cwd, "AGENTS.md") },
+			],
 		});
 
 		(InteractiveMode as any).prototype.showLoadedResources.call(fakeThis, {

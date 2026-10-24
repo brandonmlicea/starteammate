@@ -21,7 +21,11 @@ export interface ClientAttribution {
 }
 
 /** starteammate's attribution, used by starteammate-agent-core, starteammate-durable, and the coding agent. */
-export const STARTEAMMATE_ATTRIBUTION: ClientAttribution = { name: "starteammate", url: "https://pi.dev", categories: ["cli-agent"] };
+export const STARTEAMMATE_ATTRIBUTION: ClientAttribution = {
+	name: "starteammate",
+	url: "https://pi.dev",
+	categories: ["cli-agent"],
+};
 
 /**
  * How starteammate-ai identifies the calling app to providers. Every field is optional; absent fields use starteammate-ai's defaults:

@@ -43,10 +43,7 @@ describe("DefaultResourceLoader", () => {
 		it("should not treat a project manifest as the owner of a project extension", async () => {
 			const extensionsDir = join(cwd, ".starteammate", "extensions");
 			mkdirSync(extensionsDir, { recursive: true });
-			writeFileSync(
-				join(cwd, "package.json"),
-				JSON.stringify({ dependencies: { "starteammate": "1.0.0" } }),
-			);
+			writeFileSync(join(cwd, "package.json"), JSON.stringify({ dependencies: { starteammate: "1.0.0" } }));
 			writeFileSync(join(extensionsDir, "project-extension.ts"), "export default function() {}");
 
 			const loader = new DefaultResourceLoader({ cwd, agentDir });
@@ -61,10 +58,7 @@ describe("DefaultResourceLoader", () => {
 			const packageRoot = join(tempDir, "extension-package");
 			const extensionsDir = join(packageRoot, "extensions");
 			mkdirSync(extensionsDir, { recursive: true });
-			writeFileSync(
-				join(packageRoot, "package.json"),
-				JSON.stringify({ dependencies: { "starteammate": "1.0.0" } }),
-			);
+			writeFileSync(join(packageRoot, "package.json"), JSON.stringify({ dependencies: { starteammate: "1.0.0" } }));
 			writeFileSync(join(extensionsDir, "package-extension.ts"), "export default function() {}");
 
 			const loader = new DefaultResourceLoader({
@@ -103,7 +97,9 @@ describe("DefaultResourceLoader", () => {
 			expect(warnings).toHaveLength(1);
 			expect(warnings[0].path).toBe("npm:broken-package");
 			expect(warnings[0].warning).toMatch(/^failed to install \(.*failed with code 1\)\./);
-			expect(warnings[0].warning).toContain('Run "starteammate remove npm:broken-package" to remove it from settings.json.');
+			expect(warnings[0].warning).toContain(
+				'Run "starteammate remove npm:broken-package" to remove it from settings.json.',
+			);
 		});
 
 		// #11088
@@ -135,7 +131,10 @@ describe("DefaultResourceLoader", () => {
 				JSON.stringify({ npmCommand: [process.execPath, "-e", "process.exit(1)"] }),
 			);
 			mkdirSync(join(cwd, ".starteammate"), { recursive: true });
-			writeFileSync(join(cwd, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:broken-package"] }));
+			writeFileSync(
+				join(cwd, ".starteammate", "settings.json"),
+				JSON.stringify({ packages: ["npm:broken-package"] }),
+			);
 			const loader = new DefaultResourceLoader({
 				cwd,
 				agentDir,
@@ -1142,7 +1141,8 @@ export default function(starteammate: ExtensionAPI) {
 					{
 						name: "mcp",
 						replaceable: true,
-						factory: (starteammate) => starteammate.registerCommand("mcp", { description: "built-in mcp", handler: async () => {} }),
+						factory: (starteammate) =>
+							starteammate.registerCommand("mcp", { description: "built-in mcp", handler: async () => {} }),
 					},
 					{
 						name: "llama",

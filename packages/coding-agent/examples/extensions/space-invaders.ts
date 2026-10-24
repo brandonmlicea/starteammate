@@ -3,8 +3,8 @@
  * Uses Kitty keyboard protocol for smooth movement (press/release detection)
  */
 
-import type { ExtensionAPI } from "starteammate";
 import { isKeyRelease, Key, matchesKey, visibleWidth } from "@starteammate/tui";
+import type { ExtensionAPI } from "starteammate";
 
 const GAME_WIDTH = 60;
 const GAME_HEIGHT = 24;

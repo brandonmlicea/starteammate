@@ -72,8 +72,12 @@ describe("client identity", () => {
 	});
 
 	it("formats user agents", () => {
-		expect(formatUserAgent()).toBe(`starteammate/${STARTEAMMATE_AI_VERSION} (${process.platform}; ${runtime}; ${process.arch})`);
-		expect(formatUserAgent({ version: "9.9.9" })).toBe(`starteammate/9.9.9 (${process.platform}; ${runtime}; ${process.arch})`);
+		expect(formatUserAgent()).toBe(
+			`starteammate/${STARTEAMMATE_AI_VERSION} (${process.platform}; ${runtime}; ${process.arch})`,
+		);
+		expect(formatUserAgent({ version: "9.9.9" })).toBe(
+			`starteammate/9.9.9 (${process.platform}; ${runtime}; ${process.arch})`,
+		);
 		expect(formatUserAgent({ userAgent: "short", version: "9.9.9" })).toBe("starteammate");
 		expect(formatUserAgent({ userAgent: { custom: "acme/1.0" } })).toBe("acme/1.0");
 	});
@@ -134,7 +138,9 @@ describe("client identity", () => {
 			getAttributionHeaders(target("custom-nim", "https://integrate.api.nvidia.com/v1"), { attribution: ACME }),
 		).toEqual({ "X-BILLING-INVOKE-ORIGIN": "Acme" });
 		expect(
-			getAttributionHeaders(target("opencode", "https://opencode.ai/zen/v1"), { attribution: STARTEAMMATE_ATTRIBUTION }),
+			getAttributionHeaders(target("opencode", "https://opencode.ai/zen/v1"), {
+				attribution: STARTEAMMATE_ATTRIBUTION,
+			}),
 		).toEqual({
 			"x-opencode-client": "starteammate",
 		});
@@ -145,7 +151,9 @@ describe("client identity", () => {
 
 	it("does not attribute NVIDIA models routed through gateways to NVIDIA", () => {
 		expect(
-			getAttributionHeaders(target("openrouter", "https://openrouter.ai/api/v1"), { attribution: STARTEAMMATE_ATTRIBUTION }),
+			getAttributionHeaders(target("openrouter", "https://openrouter.ai/api/v1"), {
+				attribution: STARTEAMMATE_ATTRIBUTION,
+			}),
 		).not.toHaveProperty("X-BILLING-INVOKE-ORIGIN");
 		expect(
 			getAttributionHeaders(target("vercel-ai-gateway", "https://ai-gateway.vercel.sh/v1"), {

@@ -3,8 +3,8 @@ import {
 	fauxAssistantMessage,
 	type Message,
 	type Models,
-	STARTEAMMATE_ATTRIBUTION,
 	type SimpleStreamOptions,
+	STARTEAMMATE_ATTRIBUTION,
 	type SystemMessage,
 } from "@starteammate/ai";
 import {
@@ -99,7 +99,11 @@ describe("generation", () => {
 		const answer = await root.commit((tx) => tx.entry(AssistantEntry, settled.answer), context);
 		expect(textOf(answer?.model?.[0])).toBe("Hello there");
 		const entries = await allEntries(root);
-		expect(entries.map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.system", "starteammate.assistant"]);
+		expect(entries.map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.system",
+			"starteammate.assistant",
+		]);
 		expect(entries[0]!.id).toBe(settled.entry);
 		expect(entries[1]!.model).toEqual([
 			{ role: "system", content: "", sections: { preamble: "You are helpful." }, timestamp: expect.any(Number) },
@@ -195,7 +199,12 @@ describe("generation", () => {
 		const settled = await (await root.submit({ type: "input", content: "hi" }, context)).wait(context);
 		expect(settled.status).toBe("done");
 		const entries = await allEntries(root);
-		expect(entries.map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.system", "starteammate.assistant", "starteammate.assistant"]);
+		expect(entries.map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.system",
+			"starteammate.assistant",
+			"starteammate.assistant",
+		]);
 		expect((entries[2]!.model![0] as AssistantMessage).stopReason).toBe("error");
 		expect(values.some((value) => value.generation?.retry?.error === "503 Service Unavailable")).toBe(true);
 		expect(values.some((value) => value.generation?.attempt === 2)).toBe(true);
@@ -211,7 +220,11 @@ describe("generation", () => {
 		harness.resume();
 		const settled = await (await root.submit({ type: "input", content: "hi" }, context)).wait(context);
 		expect(settled).toMatchObject({ status: "unanswered", reason: "model_error", detail: "503 Service Unavailable" });
-		expect((await allEntries(root)).map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.assistant", "starteammate.assistant"]);
+		expect((await allEntries(root)).map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+			"starteammate.assistant",
+		]);
 		expect(setup.faux.getPendingResponseCount()).toBe(1);
 		await harness.close(context);
 	});
@@ -247,7 +260,10 @@ describe("generation", () => {
 		expect((await (await root.submit({ type: "input", content: "hi" }, context)).wait(context)).status).toBe("done");
 		expect(setup.reports).toContainEqual(new Error("wrapper failed"));
 		// The failed section is absent, so nothing was rendered.
-		expect((await allEntries(root)).map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.assistant"]);
+		expect((await allEntries(root)).map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+		]);
 		await harness.close(context);
 	});
 

@@ -2,8 +2,9 @@
 // the next commit that reads or writes `starteammate.live` or within `settings.progress.persistWithinMs`. Crashes are simulated
 // by failing the Harness: from that moment nothing more reaches Storage, as when the process dies; the reopened Harness
 // resumes from what was stored.
-import { applyImmutable } from "@starteammate/chord/delta";
+
 import { fauxAssistantMessage, fauxText, fauxToolCall, Type } from "@starteammate/ai";
+import { applyImmutable } from "@starteammate/chord/delta";
 import {
 	AssistantEntry,
 	type ConversationId,
@@ -388,7 +389,9 @@ describe("compaction", () => {
 		setup.faux.setResponses([fauxAssistantMessage("SUMMARY")]);
 		opened = await open(storage, setup);
 		expect((await opened.harness.waitForTask(id, context)).state.outcome.status).toBe("completed");
-		await waitFor(async () => (await allEntries(opened.root)).some((entry) => entry.kind === "starteammate.compaction"));
+		await waitFor(async () =>
+			(await allEntries(opened.root)).some((entry) => entry.kind === "starteammate.compaction"),
+		);
 		expect(await opened.harness.snapshot(LiveDoc, opened.root.id, context)).toEqual({});
 		await opened.harness.close(context);
 	});

@@ -9,9 +9,9 @@
  * 2. Use /tools to open the tool selector
  */
 
+import { Container, type SettingItem, SettingsList } from "@starteammate/tui";
 import type { ExtensionAPI, ExtensionContext, ToolInfo } from "starteammate";
 import { getSettingsListTheme } from "starteammate";
-import { Container, type SettingItem, SettingsList } from "@starteammate/tui";
 
 // State persisted to session
 interface ToolsState {

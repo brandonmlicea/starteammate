@@ -1,11 +1,6 @@
-import {
-	CustomEditor,
-	type ExtensionAPI,
-	type ExtensionContext,
-	type KeybindingsManager,
-} from "starteammate";
 import type { Component, EditorTheme, TUI } from "@starteammate/tui";
 import { truncateToWidth, visibleWidth } from "@starteammate/tui";
+import { CustomEditor, type ExtensionAPI, type ExtensionContext, type KeybindingsManager } from "starteammate";
 
 function fitBorder(
 	left: string,
@@ -110,7 +105,9 @@ export default function (starteammate: ExtensionAPI) {
 		let branch: string | undefined;
 
 		const refreshBranch = async () => {
-			const result = await starteammate.exec("git", ["branch", "--show-current"], { cwd: ctx.cwd }).catch(() => undefined);
+			const result = await starteammate
+				.exec("git", ["branch", "--show-current"], { cwd: ctx.cwd })
+				.catch(() => undefined);
 			const stdout = result?.stdout.trim();
 			branch = stdout && stdout.length > 0 ? stdout : undefined;
 			activeTui?.requestRender();

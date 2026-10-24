@@ -29,7 +29,7 @@ export const VIRTUAL_MODULES: Record<string, unknown> = {
 	"@starteammate/ai/models": bundledStarteammateAiModels,
 	"@starteammate/ai/oauth": bundledStarteammateAiOauth,
 	"@starteammate/ai/providers/all": bundledStarteammateAiProviders,
-	"starteammate": bundledStarteammateCodingAgent,
+	starteammate: bundledStarteammateCodingAgent,
 	"@mariozechner/starteammate-agent-core": bundledStarteammateAgentCore,
 	"@mariozechner/starteammate-tui": bundledStarteammateTui,
 	"@mariozechner/starteammate-ai": bundledStarteammateAiCompat,

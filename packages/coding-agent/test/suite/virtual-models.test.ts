@@ -126,9 +126,12 @@ describe("AgentSession virtual models", () => {
 			settings: { compaction: { keepRecentTokens: 1, reserveTokens: 0 } },
 			extensionFactories: [
 				(starteammate) => {
-					starteammate.on("session_before_compact", async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
-						compaction: { summary: "overflow compacted", firstKeptEntryId, tokensBefore },
-					}));
+					starteammate.on(
+						"session_before_compact",
+						async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
+							compaction: { summary: "overflow compacted", firstKeptEntryId, tokensBefore },
+						}),
+					);
 				},
 			],
 		});
@@ -230,9 +233,12 @@ describe("AgentSession virtual models", () => {
 			settings: { compaction: { keepRecentTokens: 1, reserveTokens: 0 } },
 			extensionFactories: [
 				(starteammate) => {
-					starteammate.on("session_before_compact", async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
-						compaction: { summary: "compacted", firstKeptEntryId, tokensBefore },
-					}));
+					starteammate.on(
+						"session_before_compact",
+						async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
+							compaction: { summary: "compacted", firstKeptEntryId, tokensBefore },
+						}),
+					);
 				},
 			],
 		});
@@ -265,9 +271,12 @@ describe("AgentSession virtual models", () => {
 			settings: { compaction: { keepRecentTokens: 1, reserveTokens: 0 } },
 			extensionFactories: [
 				(starteammate) => {
-					starteammate.on("session_before_compact", async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
-						compaction: { summary: "compacted", firstKeptEntryId, tokensBefore },
-					}));
+					starteammate.on(
+						"session_before_compact",
+						async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
+							compaction: { summary: "compacted", firstKeptEntryId, tokensBefore },
+						}),
+					);
 				},
 			],
 		});
@@ -352,9 +361,12 @@ describe("AgentSession virtual models", () => {
 			settings: { compaction: { keepRecentTokens: 1 } },
 			extensionFactories: [
 				(starteammate) => {
-					starteammate.on("session_before_compact", async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
-						compaction: { summary: "extension summary", firstKeptEntryId, tokensBefore },
-					}));
+					starteammate.on(
+						"session_before_compact",
+						async ({ preparation: { firstKeptEntryId, tokensBefore } }) => ({
+							compaction: { summary: "extension summary", firstKeptEntryId, tokensBefore },
+						}),
+					);
 				},
 			],
 		});

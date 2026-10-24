@@ -30,10 +30,18 @@ async function connect(): Promise<{ connection: Connection; remote: RemotePlatfo
 	connected ??= (async () => {
 		const target: SshTarget = {
 			host: host!,
-			...(process.env.STARTEAMMATE_ENV_SSH_USER === undefined ? {} : { user: process.env.STARTEAMMATE_ENV_SSH_USER }),
-			...(process.env.STARTEAMMATE_ENV_SSH_PORT === undefined ? {} : { port: Number(process.env.STARTEAMMATE_ENV_SSH_PORT) }),
-			...(process.env.STARTEAMMATE_ENV_SSH_KEY === undefined ? {} : { identityFile: process.env.STARTEAMMATE_ENV_SSH_KEY }),
-			...(process.env.STARTEAMMATE_ENV_SSH_PROGRAM === undefined ? {} : { ssh: process.env.STARTEAMMATE_ENV_SSH_PROGRAM }),
+			...(process.env.STARTEAMMATE_ENV_SSH_USER === undefined
+				? {}
+				: { user: process.env.STARTEAMMATE_ENV_SSH_USER }),
+			...(process.env.STARTEAMMATE_ENV_SSH_PORT === undefined
+				? {}
+				: { port: Number(process.env.STARTEAMMATE_ENV_SSH_PORT) }),
+			...(process.env.STARTEAMMATE_ENV_SSH_KEY === undefined
+				? {}
+				: { identityFile: process.env.STARTEAMMATE_ENV_SSH_KEY }),
+			...(process.env.STARTEAMMATE_ENV_SSH_PROGRAM === undefined
+				? {}
+				: { ssh: process.env.STARTEAMMATE_ENV_SSH_PROGRAM }),
 			knownHostsFile: join(root, "known_hosts"),
 			hostKeyAlias: "starteammate-env-external",
 		};
@@ -81,7 +89,12 @@ if (host !== undefined) {
 			const cwd = getOrThrow(await home.createTempDir("starteammate-env-conformance-", BACKGROUND_CONTEXT));
 			try {
 				await use(
-					new RemoteExecutionEnv({ connection, id: "starteammate-env:external", cwd, watch: { pollIntervalMs: 100 } }),
+					new RemoteExecutionEnv({
+						connection,
+						id: "starteammate-env:external",
+						cwd,
+						watch: { pollIntervalMs: 100 },
+					}),
 				);
 			} finally {
 				await home.remove(cwd, { recursive: true, force: true }, BACKGROUND_CONTEXT);

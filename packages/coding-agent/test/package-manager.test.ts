@@ -2012,7 +2012,11 @@ Content`,
 			writeFileSync(join(pkgDir, "extensions", "bar.ts"), "export default function() {}");
 			writeFileSync(join(pkgDir, "skills", "foo", "SKILL.md"), "# Foo\n");
 			settingsManager.setProjectPackages([
-				{ source: relative(join(tempDir, ".starteammate"), pkgDir), autoload: false, extensions: ["+extensions/foo.ts"] },
+				{
+					source: relative(join(tempDir, ".starteammate"), pkgDir),
+					autoload: false,
+					extensions: ["+extensions/foo.ts"],
+				},
 			]);
 
 			const result = await packageManager.resolve();

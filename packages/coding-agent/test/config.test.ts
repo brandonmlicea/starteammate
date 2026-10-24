@@ -190,15 +190,7 @@ describe("detectInstallMethod", () => {
 		expect(detectInstallMethod()).toBe("npm");
 		expect(command).toEqual({
 			command: "npm",
-			args: [
-				"--prefix",
-				prefix,
-				"install",
-				"-g",
-				"--ignore-scripts",
-				"--min-release-age=0",
-				"starteammate",
-			],
+			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "starteammate"],
 			display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 starteammate`,
 		});
 	});
@@ -213,15 +205,7 @@ describe("detectInstallMethod", () => {
 
 		expect(command).toEqual({
 			command: "npm",
-			args: [
-				"--prefix",
-				prefix,
-				"install",
-				"-g",
-				"--ignore-scripts",
-				"--min-release-age=0",
-				"starteammate@1.2.3",
-			],
+			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "starteammate@1.2.3"],
 			display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 starteammate@1.2.3`,
 		});
 	});
@@ -229,11 +213,23 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed packages from the current install prefix", () => {
 		const { prefix } = createNpmPrefixInstall();
 
-		const command = getSelfUpdateCommand("@mariozechner/starteammate-coding-agent", undefined, "@new-scope/starteammate");
+		const command = getSelfUpdateCommand(
+			"@mariozechner/starteammate-coding-agent",
+			undefined,
+			"@new-scope/starteammate",
+		);
 
 		expect(command).toEqual({
 			command: "npm",
-			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@new-scope/starteammate"],
+			args: [
+				"--prefix",
+				prefix,
+				"install",
+				"-g",
+				"--ignore-scripts",
+				"--min-release-age=0",
+				"@new-scope/starteammate",
+			],
 			display: `npm --prefix ${prefix} uninstall -g @mariozechner/starteammate-coding-agent && npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @new-scope/starteammate`,
 			steps: [
 				{
@@ -243,7 +239,15 @@ describe("detectInstallMethod", () => {
 				},
 				{
 					command: "npm",
-					args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@new-scope/starteammate"],
+					args: [
+						"--prefix",
+						prefix,
+						"install",
+						"-g",
+						"--ignore-scripts",
+						"--min-release-age=0",
+						"@new-scope/starteammate",
+					],
 					display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @new-scope/starteammate`,
 				},
 			],
@@ -257,15 +261,7 @@ describe("detectInstallMethod", () => {
 
 		expect(command).toEqual({
 			command: "npm",
-			args: [
-				"--prefix",
-				prefix,
-				"install",
-				"-g",
-				"--ignore-scripts",
-				"--min-release-age=0",
-				"starteammate",
-			],
+			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "starteammate"],
 			display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 starteammate`,
 		});
 	});
@@ -323,7 +319,11 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed pnpm global installs by removing the old package first", () => {
 		createPnpmGlobalInstall();
 
-		const command = getSelfUpdateCommand("@mariozechner/starteammate-coding-agent", undefined, "@new-scope/starteammate");
+		const command = getSelfUpdateCommand(
+			"@mariozechner/starteammate-coding-agent",
+			undefined,
+			"@new-scope/starteammate",
+		);
 
 		expect(detectInstallMethod()).toBe("pnpm");
 		expect(command).toEqual({
@@ -392,13 +392,18 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed yarn global installs by removing the old package first", () => {
 		createYarnGlobalInstall();
 
-		const command = getSelfUpdateCommand("@mariozechner/starteammate-coding-agent", undefined, "@new-scope/starteammate");
+		const command = getSelfUpdateCommand(
+			"@mariozechner/starteammate-coding-agent",
+			undefined,
+			"@new-scope/starteammate",
+		);
 
 		expect(detectInstallMethod()).toBe("yarn");
 		expect(command).toEqual({
 			command: "yarn",
 			args: ["global", "add", "--ignore-scripts", "@new-scope/starteammate"],
-			display: "yarn global remove @mariozechner/starteammate-coding-agent && yarn global add --ignore-scripts @new-scope/starteammate",
+			display:
+				"yarn global remove @mariozechner/starteammate-coding-agent && yarn global add --ignore-scripts @new-scope/starteammate",
 			steps: [
 				{
 					command: "yarn",
@@ -417,7 +422,11 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed bun global installs by removing the old package first", () => {
 		createBunGlobalInstall();
 
-		const command = getSelfUpdateCommand("@mariozechner/starteammate-coding-agent", undefined, "@new-scope/starteammate");
+		const command = getSelfUpdateCommand(
+			"@mariozechner/starteammate-coding-agent",
+			undefined,
+			"@new-scope/starteammate",
+		);
 
 		expect(detectInstallMethod()).toBe("bun");
 		expect(command).toEqual({
@@ -445,9 +454,7 @@ describe("detectInstallMethod", () => {
 		chmodSync(packageDir, 0o500);
 
 		expect(getSelfUpdateCommand("starteammate")).toBeUndefined();
-		expect(getSelfUpdateUnavailableInstruction("starteammate")).toContain(
-			"the install path is not writable",
-		);
+		expect(getSelfUpdateUnavailableInstruction("starteammate")).toContain("the install path is not writable");
 	});
 });
 

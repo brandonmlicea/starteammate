@@ -1,6 +1,5 @@
 import { GCProfiler, getHeapStatistics, setFlagsFromString } from "node:v8";
 import { runInNewContext } from "node:vm";
-import type { Draft } from "@starteammate/chord";
 import {
 	type AssistantMessage,
 	type FauxResponseStep,
@@ -10,6 +9,7 @@ import {
 	fauxToolCall,
 	Type,
 } from "@starteammate/ai";
+import type { Draft } from "@starteammate/chord";
 import {
 	AgentDoc,
 	type AgentEvent,
@@ -116,7 +116,8 @@ describe("agent events", () => {
 		observeCommits(harness, (publication) => {
 			for (const change of documentChanges(publication)) {
 				const message = (change.value as LiveState | null)?.generation?.message as AssistantMessage | undefined;
-				if (change.record.kind === "starteammate.live" && message !== undefined) partials.push(textOf(message) ?? "");
+				if (change.record.kind === "starteammate.live" && message !== undefined)
+					partials.push(textOf(message) ?? "");
 			}
 		});
 		const submission = await root.submit({ type: "input", content: "hi" }, context);
@@ -201,7 +202,11 @@ describe("agent events", () => {
 			args: { n: 1 },
 		});
 		const end = tool.at(-1)!;
-		expect(end).toMatchObject({ type: "tool_execution_end", toolCallId: "c1", entry: { kind: "starteammate.tool-result" } });
+		expect(end).toMatchObject({
+			type: "tool_execution_end",
+			toolCallId: "c1",
+			entry: { kind: "starteammate.tool-result" },
+		});
 		// As in the coding agent, the tool ends directly before its result message.
 		const all = events();
 		const endIndex = all.indexOf(end);

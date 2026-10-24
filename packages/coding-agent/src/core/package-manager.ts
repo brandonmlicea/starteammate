@@ -49,9 +49,9 @@ import {
 } from "../utils/paths.ts";
 import { stripBom } from "../utils/text.ts";
 import { isStdoutTakenOver } from "./output-guard.ts";
-import { type StarteammateManifest, readStarteammateManifest } from "./starteammate-manifest.ts";
 import type { PackageSource, SettingsManager } from "./settings-manager.ts";
 import { BUILTIN_PATH_PREFIX } from "./source-info.ts";
+import { readStarteammateManifest, type StarteammateManifest } from "./starteammate-manifest.ts";
 
 const NETWORK_TIMEOUT_MS = 10000;
 const UPDATE_CHECK_CONCURRENCY = 4;

@@ -1,7 +1,6 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Context, JsonValue } from "@starteammate/chord";
 import {
 	fauxAssistantMessage,
 	fauxText,
@@ -10,6 +9,7 @@ import {
 	type ToolResultMessage,
 	Type,
 } from "@starteammate/ai";
+import type { Context, JsonValue } from "@starteammate/chord";
 import {
 	type AgentEvent,
 	type Conversation,
@@ -1225,7 +1225,10 @@ describe("tool rounds", () => {
 		expect((await (await root.submit({ type: "input", content: "go" }, context)).wait(context)).status).toBe("done");
 		const tasks = (await harness.commit((tx) => tx.scanTasks({ conversationId: root.id }, 20), context)).items;
 		const [first, second] = tasks.filter((task) => task.kind === "starteammate.generation");
-		expect(tasks.filter((task) => task.kind === "starteammate.tool").map((task) => task.owner)).toEqual([first!.id, first!.id]);
+		expect(tasks.filter((task) => task.kind === "starteammate.tool").map((task) => task.owner)).toEqual([
+			first!.id,
+			first!.id,
+		]);
 		expect(first!.owner).toBeUndefined();
 		expect(second!.owner).toBeUndefined();
 		const assistant = (await allEntries(root)).find((entry) => entry.kind === "starteammate.assistant")!;
@@ -1314,7 +1317,8 @@ describe("tool rounds", () => {
 			events.push(...batch);
 		});
 		await (await root.submit({ type: "input", content: "go" }, context)).wait(context);
-		const first = (await harness.commit((tx) => tx.scanTasks({ kind: "starteammate.generation" }, 1), context)).items[0]!;
+		const first = (await harness.commit((tx) => tx.scanTasks({ kind: "starteammate.generation" }, 1), context))
+			.items[0]!;
 		expect((await state(harness, first.id)).status).toBe("completing");
 		const turns = () => events.filter((event) => event.type.startsWith("turn_")).map((event) => event.type);
 		await waitFor(() => turns().length === 4);
@@ -1397,7 +1401,10 @@ describe("tool rounds", () => {
 		const again = (await reopened.harness.submission(submission.id, context))!;
 		expect(await again.wait(context)).toMatchObject({ status: "unanswered", reason: "faulted" });
 		expect(await reopened.harness.snapshot(LiveDoc, reopened.root.id, context)).toEqual({});
-		expect((await allEntries(reopened.root)).map((entry) => entry.kind)).toEqual(["starteammate.user", "starteammate.assistant"]);
+		expect((await allEntries(reopened.root)).map((entry) => entry.kind)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+		]);
 		await reopened.harness.close(context);
 	});
 });
@@ -1829,7 +1836,8 @@ describe("tool rounds and events", () => {
 		await (await root.submit({ type: "input", content: "go" }, context)).wait(context);
 		const late = await listen(harness, root);
 		open("hooked");
-		const [first] = (await harness.commit((tx) => tx.scanTasks({ kind: "starteammate.generation" }, 1), context)).items;
+		const [first] = (await harness.commit((tx) => tx.scanTasks({ kind: "starteammate.generation" }, 1), context))
+			.items;
 		await harness.waitForTask(first!.id, context);
 		await root.commit((tx) => tx.appendEntry(root.id, { kind: "note" }), context);
 		await waitFor(() => late.events.some((event) => event.type === "entry_appended"));

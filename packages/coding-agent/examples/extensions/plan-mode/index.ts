@@ -14,8 +14,8 @@
 
 import type { AgentMessage } from "@starteammate/agent-core";
 import type { AssistantMessage, TextContent } from "@starteammate/ai";
-import type { ExtensionAPI, ExtensionContext } from "starteammate";
 import { Key } from "@starteammate/tui";
+import type { ExtensionAPI, ExtensionContext } from "starteammate";
 import { extractTodoItems, isSafeCommand, markCompletedSteps, type TodoItem } from "./utils.ts";
 
 // Tools

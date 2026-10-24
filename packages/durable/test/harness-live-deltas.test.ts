@@ -1,5 +1,5 @@
-import type { Op } from "@starteammate/chord/delta";
 import { fauxAssistantMessage, fauxText, fauxToolCall, Type } from "@starteammate/ai";
+import type { Op } from "@starteammate/chord/delta";
 import {
 	type CommitPublication,
 	defineTool,
@@ -414,7 +414,12 @@ describe("starteammate.live deltas", () => {
 		const kinds = changes.flatMap((change) =>
 			change.type === "entry" ? [change.value.kind] : change.type === "task" ? [change.value.kind] : [],
 		);
-		expect(kinds.sort()).toEqual(["starteammate.assistant", "starteammate.generation", "starteammate.tool", "starteammate.tool"]);
+		expect(kinds.sort()).toEqual([
+			"starteammate.assistant",
+			"starteammate.generation",
+			"starteammate.tool",
+			"starteammate.tool",
+		]);
 		await harness.close(context);
 	});
 

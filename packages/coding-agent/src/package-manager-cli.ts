@@ -69,7 +69,11 @@ function getActiveManagedInstallRoot(): string | undefined {
 			layout?: unknown;
 			schemaVersion?: unknown;
 		};
-		if (marker.kind !== "starteammate-managed-install" || marker.schemaVersion !== 1 || marker.layout !== "releases-v1") {
+		if (
+			marker.kind !== "starteammate-managed-install" ||
+			marker.schemaVersion !== 1 ||
+			marker.layout !== "releases-v1"
+		) {
 			throw new Error();
 		}
 	} catch {
@@ -121,7 +125,9 @@ function verifyManagedRelease(releaseDir: string, expectedVersion: string): void
 	}
 	const installedVersion = result.stdout.trim();
 	if (installedVersion !== expectedVersion) {
-		throw new Error(`Managed Starteammate smoke test returned version ${installedVersion}; expected ${expectedVersion}.`);
+		throw new Error(
+			`Managed Starteammate smoke test returned version ${installedVersion}; expected ${expectedVersion}.`,
+		);
 	}
 }
 
@@ -208,10 +214,9 @@ async function runManagedSelfUpdate(managedRoot: string, version: string): Promi
 	let stageDir: string | undefined;
 	try {
 		cleanupManagedStaging(managedRoot);
-		const installerApiBase = (process.env.STARTEAMMATE_INSTALLER_API_BASE?.trim() || DEFAULT_INSTALLER_API_BASE).replace(
-			/\/+$/,
-			"",
-		);
+		const installerApiBase = (
+			process.env.STARTEAMMATE_INSTALLER_API_BASE?.trim() || DEFAULT_INSTALLER_API_BASE
+		).replace(/\/+$/, "");
 		const releaseUrl = `${installerApiBase}/${encodeURIComponent(version)}`;
 		const stagingRoot = join(managedRoot, "staging");
 		const releasesRoot = join(managedRoot, "releases");

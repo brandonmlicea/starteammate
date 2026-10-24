@@ -128,8 +128,8 @@ import { extensionForImageMimeType, readClipboardImage } from "../../utils/clipb
 import { parseGitUrl } from "../../utils/git.ts";
 import { ensurePngTranscoder } from "../../utils/image-convert.ts";
 import { getCwdRelativePath } from "../../utils/paths.ts";
-import { getStarteammateUserAgent } from "../../utils/starteammate-user-agent.ts";
 import { killTrackedDetachedChildren } from "../../utils/shell.ts";
+import { getStarteammateUserAgent } from "../../utils/starteammate-user-agent.ts";
 import { loadAllHighlightLanguages } from "../../utils/syntax-highlight.ts";
 import { ensureTool, type ToolStatus } from "../../utils/tools-manager.ts";
 import { checkForNewStarteammateVersion, type LatestStarteammateRelease } from "../../utils/version-check.ts";
@@ -160,12 +160,16 @@ import {
 	formatAuthSelectorProviderType,
 	OAuthSelectorComponent,
 } from "./components/oauth-selector.ts";
-import { starteammateLogoLines, starteammateWordmark, supportsStarteammateLogo } from "./components/starteammate-logo.ts";
 import { createLoginMenuSelector } from "./components/radius-login-selector.ts";
 import { ScopedModelsSelectorComponent } from "./components/scoped-models-selector.ts";
 import { SessionSelectorComponent } from "./components/session-selector.ts";
 import { SettingsSelectorComponent } from "./components/settings-selector.ts";
 import { SkillInvocationMessageComponent } from "./components/skill-invocation-message.ts";
+import {
+	starteammateLogoLines,
+	starteammateWordmark,
+	supportsStarteammateLogo,
+} from "./components/starteammate-logo.ts";
 import {
 	BranchSummaryStatusIndicator,
 	CompactionStatusIndicator,
@@ -370,7 +374,8 @@ type LoginProviderCompletionOption = {
 	subscription?: boolean;
 };
 
-const RADIUS_LOGIN_INTRO = "Radius is a service crafted for Starteammate by the builders of Starteammate, Earendil Works";
+const RADIUS_LOGIN_INTRO =
+	"Radius is a service crafted for Starteammate by the builders of Starteammate, Earendil Works";
 
 const AUTH_TYPE_ORDER = { oauth: 0, api_key: 1 } satisfies Record<AuthSelectorProvider["authType"], number>;
 
@@ -1062,7 +1067,10 @@ export class InteractiveMode {
 					`Press ${keyText("app.tools.expand")} to show full startup help${showDetails ? " and loaded resources" : ""}.`,
 				);
 			const onboarding = () =>
-				theme.fg("dim", `Starteammate can explain its own features and look up its docs. Ask it how to use or extend Starteammate.`);
+				theme.fg(
+					"dim",
+					`Starteammate can explain its own features and look up its docs. Ask it how to use or extend Starteammate.`,
+				);
 			const header = new BuiltInHeader(
 				() => `${withLogo(compactInstructions())}\n${compactOnboarding()}\n\n${onboarding()}`,
 				() => `${withLogo(expandedInstructions())}\n\n${onboarding()}`,
@@ -2163,7 +2171,9 @@ export class InteractiveMode {
 	}
 
 	private crashReportInstructions(): string {
-		const resume = this.session.sessionFile ? `run \`${APP_NAME} -r\` to resume the session, then` : "start starteammate and";
+		const resume = this.session.sessionFile
+			? `run \`${APP_NAME} -r\` to resume the session, then`
+			: "start starteammate and";
 		return `To report this crash: ${resume} run /bug. The crash details are attached automatically.`;
 	}
 

@@ -323,7 +323,10 @@ describe("data-only writes", () => {
 		const entries = await allEntries(root);
 		const reset = entries.find((entry) => entry.kind === "starteammate.reset")!;
 		expect(settled.status === "done" && settled.entry).toBeGreaterThan(reset.id);
-		expect((await root.context(context)).entries.map((entry) => entry.kind)).toEqual(["starteammate.reset", "chat.message"]);
+		expect((await root.context(context)).entries.map((entry) => entry.kind)).toEqual([
+			"starteammate.reset",
+			"chat.message",
+		]);
 		// Once the reset is placed, display-only writes go in at once again.
 		const later = await root.submit({ type: "write", entry: { kind: "chat.message", data: "again" } }, context);
 		expect((await later.status(context)).status).toBe("done");
@@ -354,7 +357,14 @@ describe("data-only writes", () => {
 		expect(requests[1]).toEqual(["system:", "user:a", "assistant:one", "user:b"]);
 		const kinds = (await allEntries(root)).map((entry) => entry.kind);
 		// The unchanged prompt adds no second starteammate.system entry.
-		expect(kinds).toEqual(["starteammate.user", "starteammate.system", "starteammate.assistant", "starteammate.user", "chat.message", "starteammate.assistant"]);
+		expect(kinds).toEqual([
+			"starteammate.user",
+			"starteammate.system",
+			"starteammate.assistant",
+			"starteammate.user",
+			"chat.message",
+			"starteammate.assistant",
+		]);
 		await harness.close(context);
 	});
 

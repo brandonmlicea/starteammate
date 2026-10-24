@@ -11,8 +11,8 @@
  */
 
 import { StringEnum } from "@starteammate/ai";
-import type { ExtensionAPI, ExtensionContext, Theme } from "starteammate";
 import { matchesKey, Text, truncateToWidth } from "@starteammate/tui";
+import type { ExtensionAPI, ExtensionContext, Theme } from "starteammate";
 import { Type } from "typebox";
 
 interface Todo {

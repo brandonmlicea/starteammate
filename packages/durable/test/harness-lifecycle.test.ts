@@ -1,9 +1,9 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createModels, fauxAssistantMessage, fauxText, fauxToolCall, Type } from "@starteammate/ai";
 import type { Context, JsonValue } from "@starteammate/chord";
 import { withAbortSignal } from "@starteammate/chord/context";
-import { createModels, fauxAssistantMessage, fauxText, fauxToolCall, Type } from "@starteammate/ai";
 import {
 	type Conversation,
 	type ConversationId,

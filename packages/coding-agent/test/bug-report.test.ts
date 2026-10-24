@@ -46,7 +46,9 @@ describe("bug report prompt", () => {
 			const descriptionEditor = editorContainer.children[0];
 			expect(descriptionEditor).toBeInstanceOf(ExtensionEditorComponent);
 			if (!(descriptionEditor instanceof ExtensionEditorComponent)) throw new Error("Missing description editor");
-			descriptionEditor.handleInput("\x1b[200~Request failed\r\n  ↳ starteammate exiting...\r\nstack trace\x1b[201~");
+			descriptionEditor.handleInput(
+				"\x1b[200~Request failed\r\n  ↳ starteammate exiting...\r\nstack trace\x1b[201~",
+			);
 			descriptionEditor.handleInput("\r");
 			expect(editorContainer.children[0]).toBe(editor);
 

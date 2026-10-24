@@ -6,8 +6,8 @@
  * as expandable custom entries.
  */
 
-import { type ExtensionAPI, keyHint } from "starteammate";
 import { Box, Text } from "@starteammate/tui";
+import { type ExtensionAPI, keyHint } from "starteammate";
 
 const ENTRY_TYPE = "debug-provider-events";
 const STATUS_KEY = "debug-provider";

@@ -8,8 +8,8 @@
  * Usage: /status-card [message]
  */
 
-import type { ExtensionAPI } from "starteammate";
 import { Box, Text } from "@starteammate/tui";
+import type { ExtensionAPI } from "starteammate";
 
 interface StatusCardData {
 	message: string;

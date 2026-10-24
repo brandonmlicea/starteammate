@@ -1,5 +1,5 @@
-import { applyImmutable, type Op } from "@starteammate/chord/delta";
 import { type AssistantMessage, type FauxResponseStep, fauxAssistantMessage, fauxText } from "@starteammate/ai";
+import { applyImmutable, type Op } from "@starteammate/chord/delta";
 import {
 	AgentDoc,
 	type Conversation,
@@ -19,7 +19,13 @@ import { aborted, deferred } from "./task-support.ts";
 
 type Frame = { value: ConversationView; ops: readonly Op[] };
 
-const MOUNTED = ["starteammate.agent", "starteammate.inbox", "starteammate.live", "starteammate.provider", "starteammate.usage"];
+const MOUNTED = [
+	"starteammate.agent",
+	"starteammate.inbox",
+	"starteammate.live",
+	"starteammate.provider",
+	"starteammate.usage",
+];
 
 /** Start a watch of `conversation` that records its acquisition revision and every delivered frame. */
 async function record(conversation: Conversation) {
@@ -112,14 +118,22 @@ describe("conversation view", () => {
 		const { initial, frames, stop } = await record(root);
 		const touching = touches(harness, root);
 		const submission = await root.submit({ type: "input", content: "hi" }, context);
-		await waitFor(() => frames.some((frame) => (frame.value.docs["starteammate.live"] as { generation?: unknown }).generation));
+		await waitFor(() =>
+			frames.some((frame) => (frame.value.docs["starteammate.live"] as { generation?: unknown }).generation),
+		);
 		release.resolve();
 		await submission.wait(context);
 		await harness.waitForIdle(context);
 		await drained();
 		expect(frames).toHaveLength(touching.count);
 		expect(replay(initial, frames)).toEqual(await committed(harness, root, initial.conversation));
-		expect(frames[0]!.ops).toContainEqual(["p", ["entries"], 0, 0, [expect.objectContaining({ kind: "starteammate.user" })]]);
+		expect(frames[0]!.ops).toContainEqual([
+			"p",
+			["entries"],
+			0,
+			0,
+			[expect.objectContaining({ kind: "starteammate.user" })],
+		]);
 		// Document operations keep their exact shape under the mount path.
 		expect(frames.flatMap((frame) => frame.ops)).toContainEqual([
 			"s",

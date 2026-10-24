@@ -1,8 +1,9 @@
 // What a streamed answer changed in its partial message between two partial commits, so a commit costs the new text.
-import type { JsonRepresentation, JsonValue } from "@starteammate/chord";
-import { appendText, type Draft } from "@starteammate/chord/delta";
+
 import type { AssistantMessage, AssistantMessageEvent, ToolCall } from "@starteammate/ai";
 import { type JsonChange, StreamingJsonParser } from "@starteammate/ai/utils/streaming-json";
+import type { JsonRepresentation, JsonValue } from "@starteammate/chord";
+import { appendText, type Draft } from "@starteammate/chord/delta";
 import { type AssignPlan, assignJson } from "./json.ts";
 import type { LiveState } from "./live.ts";
 

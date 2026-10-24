@@ -94,7 +94,9 @@ export async function getLatestStarteammateVersion(
 	return (await getLatestStarteammateRelease(currentVersion, options))?.version;
 }
 
-export async function checkForNewStarteammateVersion(currentVersion: string): Promise<LatestStarteammateRelease | undefined> {
+export async function checkForNewStarteammateVersion(
+	currentVersion: string,
+): Promise<LatestStarteammateRelease | undefined> {
 	if (process.env.STARTEAMMATE_SKIP_VERSION_CHECK) return undefined;
 
 	try {

@@ -1,4 +1,3 @@
-import { type Context, copyJson, type Draft } from "@starteammate/chord";
 import type {
 	Api,
 	AssistantMessage,
@@ -12,6 +11,7 @@ import type {
 import { isContextOverflow } from "@starteammate/ai/utils/overflow";
 import { isRetryableAssistantError, retryDelayMs } from "@starteammate/ai/utils/retry";
 import { getCurrentTools } from "@starteammate/ai/utils/transcript";
+import { type Context, copyJson, type Draft } from "@starteammate/chord";
 import { AssistantEntry, ResetEntry, SystemEntry, UserEntry } from "../entries.ts";
 import type { ExecutionEnv } from "../env/index.ts";
 import type { TaskCreationOptions } from "../session/transaction.ts";

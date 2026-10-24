@@ -217,7 +217,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 	it("skips untrusted project package settings", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
 		try {
@@ -233,7 +236,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 	it("uses remembered project trust for list", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		new ProjectTrustStore(agentDir).set(projectDir, true);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
@@ -252,7 +258,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 	it("overrides remembered trust for list with --no-approve", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		new ProjectTrustStore(agentDir).set(projectDir, true);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
@@ -270,7 +279,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 	it("approves project trust for list with --approve", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
 		try {
@@ -289,7 +301,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 	it("uses default project trust for list", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
 		writeFileSync(join(agentDir, "settings.json"), JSON.stringify({ defaultProjectTrust: "always" }));
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
 		try {
@@ -307,7 +322,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 	it("uses project_trust extensions for package commands", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
 		try {
@@ -397,7 +415,10 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 	it("lets trust.json override default project trust", async () => {
 		mkdirSync(join(projectDir, ".starteammate"), { recursive: true });
 		writeFileSync(join(agentDir, "settings.json"), JSON.stringify({ defaultProjectTrust: "always" }));
-		writeFileSync(join(projectDir, ".starteammate", "settings.json"), JSON.stringify({ packages: ["npm:@project/pkg"] }));
+		writeFileSync(
+			join(projectDir, ".starteammate", "settings.json"),
+			JSON.stringify({ packages: ["npm:@project/pkg"] }),
+		);
 		new ProjectTrustStore(agentDir).set(projectDir, false);
 		const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
@@ -595,7 +616,9 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 			const stderr = errorSpy.mock.calls.map(([message]) => String(message)).join("\n");
 			expect(stderr).toContain('Unknown option --unknown for "install".');
-			expect(stderr).toContain('Use "starteammate --help" or "starteammate install <source> [-l] [--approve|--no-approve]".');
+			expect(stderr).toContain(
+				'Use "starteammate --help" or "starteammate install <source> [-l] [--approve|--no-approve]".',
+			);
 			expect(process.exitCode).toBe(1);
 		} finally {
 			errorSpy.mockRestore();
@@ -750,7 +773,9 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 
 		expect(readFileSync(join(managedRoot, "current-version"), "utf8")).toBe(`${VERSION}\n`);
 		expect(existsSync(npmRecordPath)).toBe(false);
-		expect(logSpy.mock.calls.map(([message]) => String(message)).join("\n")).not.toContain("Updated starteammate from");
+		expect(logSpy.mock.calls.map(([message]) => String(message)).join("\n")).not.toContain(
+			"Updated starteammate from",
+		);
 		expect(errorSpy.mock.calls.map(([message]) => String(message)).join("\n")).toContain(
 			"Another managed Starteammate update is already running.",
 		);
@@ -788,7 +813,9 @@ if (process.platform !== "win32") fs.chmodSync(starteammatePath, 0o755);
 		expect(existsSync(join(managedRoot, "releases", targetVersion))).toBe(false);
 		expect(existsSync(join(managedRoot, "releases", "0.0.1"))).toBe(true);
 		expect(readdirSync(join(managedRoot, "staging"))).toEqual([]);
-		expect(logSpy.mock.calls.map(([message]) => String(message)).join("\n")).not.toContain("Updated starteammate from");
+		expect(logSpy.mock.calls.map(([message]) => String(message)).join("\n")).not.toContain(
+			"Updated starteammate from",
+		);
 		expect(errorSpy.mock.calls.map(([message]) => String(message)).join("\n")).toContain("exited with code 23");
 		expect(process.exitCode).toBe(1);
 	});
@@ -925,7 +952,8 @@ else {
 			value: join(selfPackageDir, "dist", "cli.js"),
 			configurable: true,
 		});
-		const activePackageName = PACKAGE_NAME === "@new-scope/starteammate" ? "@newer-scope/starteammate" : "@new-scope/starteammate";
+		const activePackageName =
+			PACKAGE_NAME === "@new-scope/starteammate" ? "@newer-scope/starteammate" : "@new-scope/starteammate";
 		vi.stubGlobal(
 			"fetch",
 			vi.fn(async () => Response.json({ packageName: activePackageName, version: "0.73.0" })),
@@ -1022,7 +1050,8 @@ if(args.includes("install")) process.exit(23);
 			value: join(selfPackageDir, "dist", "cli.js"),
 			configurable: true,
 		});
-		const activePackageName = PACKAGE_NAME === "@new-scope/starteammate" ? "@newer-scope/starteammate" : "@new-scope/starteammate";
+		const activePackageName =
+			PACKAGE_NAME === "@new-scope/starteammate" ? "@newer-scope/starteammate" : "@new-scope/starteammate";
 		vi.stubGlobal(
 			"fetch",
 			vi.fn(async () => Response.json({ packageName: activePackageName, version: "0.73.0" })),

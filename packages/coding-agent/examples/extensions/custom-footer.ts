@@ -9,8 +9,8 @@
  */
 
 import type { AssistantMessage } from "@starteammate/ai";
-import type { ExtensionAPI } from "starteammate";
 import { truncateToWidth, visibleWidth } from "@starteammate/tui";
+import type { ExtensionAPI } from "starteammate";
 
 export default function (starteammate: ExtensionAPI) {
 	let enabled = false;

@@ -135,9 +135,11 @@ describe.skipIf(sshd === undefined)("SSH bootstrap", () => {
 			const deployed = readFileSync(join(home, ".starteammate/mobile/tools", deployedName));
 			expect(deployed.equals(readFileSync(daemon))).toBe(true);
 			// Daemons of other contents are removed.
-			expect(readdirSync(join(home, ".starteammate/mobile/tools")).filter((name) => name.startsWith("starteammate-env-"))).toEqual([
-				deployedName,
-			]);
+			expect(
+				readdirSync(join(home, ".starteammate/mobile/tools")).filter((name) =>
+					name.startsWith("starteammate-env-"),
+				),
+			).toEqual([deployedName]);
 			const env = new RemoteExecutionEnv({ connection, id: "starteammate-env:test", cwd: home });
 			getOrThrow(await env.writeFile("over-ssh.txt", "hello", context));
 			expect(getOrThrow(await env.readTextFile("over-ssh.txt", context))).toBe("hello");
@@ -280,7 +282,9 @@ describe.skipIf(sshd === undefined)("SSH bootstrap", () => {
 			acceptHostKey(scoped, [`starteammate-env-test ${first}`]),
 		]);
 		expect(readFileSync(knownHosts, "utf8")).toBe(`starteammate-env-test ${first}\n`);
-		await expect(acceptHostKey(scoped, [`starteammate-env-test ${second}`])).rejects.toBeInstanceOf(HostKeyChangedError);
+		await expect(acceptHostKey(scoped, [`starteammate-env-test ${second}`])).rejects.toBeInstanceOf(
+			HostKeyChangedError,
+		);
 		await forgetHostKey(scoped);
 		await acceptHostKey(scoped, [`starteammate-env-test ${second}`]);
 		expect(readFileSync(knownHosts, "utf8")).toBe(`starteammate-env-test ${second}\n`);

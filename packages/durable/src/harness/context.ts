@@ -1,5 +1,5 @@
-import type { Context } from "@starteammate/chord";
 import type { AssistantMessage, Message, ToolCall, ToolResultMessage } from "@starteammate/ai";
+import type { Context } from "@starteammate/chord";
 import { SystemEntry } from "../entries.ts";
 import { idFromNumber } from "../ids.ts";
 import type { SessionImpl } from "../session/session.ts";

@@ -16,8 +16,8 @@ import { createEventBus, type EventBus } from "../event-bus.ts";
 import type { ExecOptions } from "../exec.ts";
 import { execCommand } from "../exec.ts";
 import { type McpServerConfig, McpServerRegistry, mcpNamespace, validateMcpServerConfig } from "../mcp-servers.ts";
-import { readStarteammateManifest } from "../starteammate-manifest.ts";
 import { createSyntheticSourceInfo, getSyntheticPathSource, isSyntheticPath } from "../source-info.ts";
+import { readStarteammateManifest } from "../starteammate-manifest.ts";
 import { time } from "../timings.ts";
 import type { ModelRouteRequest, VirtualModelDefinition } from "../virtual-models.ts";
 import type {
@@ -100,7 +100,7 @@ function getAliases(): Record<string, string> {
 	);
 
 	_aliases = {
-		"starteammate": starteammateCodingAgentEntry,
+		starteammate: starteammateCodingAgentEntry,
 		"@starteammate/agent-core": starteammateAgentCoreEntry,
 		"@starteammate/tui": starteammateTuiEntry,
 		"@starteammate/ai/providers/all": starteammateAiProvidersEntry,

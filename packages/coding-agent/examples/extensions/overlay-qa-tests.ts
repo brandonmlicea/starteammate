@@ -19,10 +19,10 @@
  *   /overlay-streaming  - Multiple input panels with simulated streaming (Tab to cycle focus)
  */
 
-import type { ExtensionAPI, ExtensionCommandContext, Theme } from "starteammate";
 import type { Component, OverlayAnchor, OverlayHandle, OverlayOptions, TUI } from "@starteammate/tui";
 import { Input, matchesKey, truncateToWidth, visibleWidth } from "@starteammate/tui";
 import { spawn } from "child_process";
+import type { ExtensionAPI, ExtensionCommandContext, Theme } from "starteammate";
 
 // Global handle for toggle demo (in real code, use a more elegant pattern)
 let globalToggleHandle: OverlayHandle | null = null;

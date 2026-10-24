@@ -18,8 +18,8 @@
  */
 
 import { StringEnum } from "@starteammate/ai";
-import type { ExtensionAPI, ExtensionContext, Theme, ToolExecutionMode } from "starteammate";
 import { type Component, matchesKey, Text, truncateToWidth, visibleWidth } from "@starteammate/tui";
+import type { ExtensionAPI, ExtensionContext, Theme, ToolExecutionMode } from "starteammate";
 import { Type } from "typebox";
 
 // Thrown from the tool on illegal actions. The agent runtime surfaces thrown

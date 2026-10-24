@@ -860,7 +860,9 @@ export async function playEasterEgg3d(tui: TUI, screen: readonly string[], egg: 
 		return;
 	}
 	const model =
-		egg.kind === "armin" ? arminModel(toRgb(theme.colors.accent)) : starteammateLogoModel({ column: egg.column, row: egg.row });
+		egg.kind === "armin"
+			? arminModel(toRgb(theme.colors.accent))
+			: starteammateLogoModel({ column: egg.column, row: egg.row });
 	const animation = new EasterEgg3dAnimation(tui, screen, model, colors, () => {
 		playing = false;
 		overlay.hide();

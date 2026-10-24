@@ -1,7 +1,7 @@
 import { uuidv7 } from "@starteammate/ai";
+import { Container, Markdown, matchesKey, Text } from "@starteammate/tui";
 import type { ExtensionAPI, ExtensionCommandContext } from "starteammate";
 import { DynamicBorder, getMarkdownTheme } from "starteammate";
-import { Container, Markdown, matchesKey, Text } from "@starteammate/tui";
 
 type ContentBlock = {
 	type?: string;

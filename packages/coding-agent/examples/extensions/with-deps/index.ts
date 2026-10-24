@@ -5,8 +5,8 @@
  * Requires: npm install in this directory
  */
 
-import type { ExtensionAPI } from "starteammate";
 import ms from "ms";
+import type { ExtensionAPI } from "starteammate";
 import { Type } from "typebox";
 
 export default function (starteammate: ExtensionAPI) {

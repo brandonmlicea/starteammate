@@ -5,10 +5,10 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { Type } from "@starteammate/ai";
 import { createModels } from "@starteammate/ai/models";
 import { fauxAssistantMessage, fauxProvider, fauxToolCall } from "@starteammate/ai/providers/faux";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { NodeExecutionEnv } from "../../src/env/node.ts";
 import {
 	createRegistry,

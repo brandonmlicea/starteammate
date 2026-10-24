@@ -1,4 +1,3 @@
-import type { Context, JsonValue, WatchHandle } from "@starteammate/chord";
 import type {
 	AssistantMessage,
 	CacheRetention,
@@ -15,6 +14,7 @@ import type {
 	Usage,
 	UserMessage,
 } from "@starteammate/ai";
+import type { Context, JsonValue, WatchHandle } from "@starteammate/chord";
 import type { TelemetryContext } from "@starteammate/telemetry";
 import type { ExecutionEnv, ShellOutputSkip, ShellOutputWindow } from "../env/index.ts";
 import type {

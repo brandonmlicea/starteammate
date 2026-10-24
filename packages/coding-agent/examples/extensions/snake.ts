@@ -2,8 +2,8 @@
  * Snake game extension - play snake with /snake command
  */
 
-import type { ExtensionAPI } from "starteammate";
 import { matchesKey, visibleWidth } from "@starteammate/tui";
+import type { ExtensionAPI } from "starteammate";
 
 const GAME_WIDTH = 40;
 const GAME_HEIGHT = 15;

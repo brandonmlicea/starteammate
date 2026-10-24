@@ -1,6 +1,6 @@
-import type { Context } from "@starteammate/chord";
 import type { Message, SystemMessage, Tool, ToolReference } from "@starteammate/ai";
 import { declarationsEqual, getCurrentTools, toToolDeclaration } from "@starteammate/ai/utils/transcript";
+import type { Context } from "@starteammate/chord";
 import { SystemEntry } from "../entries.ts";
 import type { ContextEdit, TypedEntryDraft } from "../types.ts";
 import type { ContextView, PromptInput, PromptSection, ToolRegistration } from "./types.ts";

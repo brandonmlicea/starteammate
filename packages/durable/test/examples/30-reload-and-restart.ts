@@ -5,10 +5,10 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { type ToolResultMessage, Type } from "@starteammate/ai";
 import { createModels } from "@starteammate/ai/models";
 import { fauxAssistantMessage, fauxProvider, fauxToolCall } from "@starteammate/ai/providers/faux";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { createRegistry, defineExtension, defineTool, Harness, ToolResultEntry } from "../../src/index.ts";
 import { openNodeSqliteStorage } from "../../src/storage/sqlite/node.ts";
 

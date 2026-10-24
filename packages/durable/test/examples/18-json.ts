@@ -9,10 +9,10 @@
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { createModels } from "@starteammate/ai/models";
 import { fauxAssistantMessage, fauxProvider, fauxText, fauxToolCall } from "@starteammate/ai/providers/faux";
 import { openaiProvider } from "@starteammate/ai/providers/openai";
+import { BACKGROUND_CONTEXT } from "@starteammate/chord/context";
 import { NodeExecutionEnv } from "../../src/env/node.ts";
 import {
 	createRegistry,

@@ -1135,7 +1135,9 @@ describe("AgentSession MCP servers registered by extensions", () => {
 
 	it("reports registered servers when no extension connects them", async () => {
 		const harness = await createHarness({
-			extensionFactories: [(starteammate) => starteammate.registerMcpServer("orphan", { url: "http://orphan.invalid" })],
+			extensionFactories: [
+				(starteammate) => starteammate.registerMcpServer("orphan", { url: "http://orphan.invalid" }),
+			],
 		});
 		harnesses.push(harness);
 		const errors: string[] = [];
@@ -1235,7 +1237,9 @@ describe("AgentSession MCP tools after resume and reload", () => {
 
 			// Like plan mode restoring its tools, or an extension adding one to the current loadout.
 			const setLoadout: ExtensionFactory = (starteammate) => {
-				starteammate.on("session_start", () => starteammate.setActiveTools(loadout ? [...loadout] : [...starteammate.getActiveTools(), "read"]));
+				starteammate.on("session_start", () =>
+					starteammate.setActiveTools(loadout ? [...loadout] : [...starteammate.getActiveTools(), "read"]),
+				);
 			};
 			const second = await setup(first.harness.sessionManager, [setLoadout]);
 			await vi.waitFor(() =>

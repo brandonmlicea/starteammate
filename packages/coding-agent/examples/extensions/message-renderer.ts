@@ -7,8 +7,8 @@
  * Usage: /status [message] - sends a status message with custom rendering
  */
 
-import type { ExtensionAPI } from "starteammate";
 import { Box, Text } from "@starteammate/tui";
+import type { ExtensionAPI } from "starteammate";
 
 export default function (starteammate: ExtensionAPI) {
 	// Register custom renderer for "status-update" messages

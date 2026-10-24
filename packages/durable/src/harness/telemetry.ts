@@ -71,7 +71,11 @@ export const DURABLE_TELEMETRY_SCHEMA = defineTelemetrySchema({
 					description: "Admission result; stale writes report done.",
 				},
 			},
-			events: { "starteammate.durable.entry": entry, "starteammate.durable.submission": submission, "starteammate.durable.report": report },
+			events: {
+				"starteammate.durable.entry": entry,
+				"starteammate.durable.submission": submission,
+				"starteammate.durable.report": report,
+			},
 			status: { default: "ok", errorWhen: "Admission failed." },
 		},
 		"starteammate.durable.phase": {

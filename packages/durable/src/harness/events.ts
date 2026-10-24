@@ -1,6 +1,6 @@
+import type { AssistantMessage, Message, Usage } from "@starteammate/ai";
 import { type Context, type JsonValue, NativeWatch, type WatchEnd } from "@starteammate/chord";
 import type { Op, Path } from "@starteammate/chord/delta";
-import type { AssistantMessage, Message, Usage } from "@starteammate/ai";
 import type { ObservedCommit } from "../session/session.ts";
 import type {
 	CommitChange,
@@ -410,7 +410,11 @@ function translate(
 		}
 	}
 	if (run !== undefined && runChanged) events.push({ type: "run_start", inputs: run.inputs });
-	if (run !== undefined && run.taskId !== runBefore?.taskId && tasks.get(run.taskId)?.kind === "starteammate.generation") {
+	if (
+		run !== undefined &&
+		run.taskId !== runBefore?.taskId &&
+		tasks.get(run.taskId)?.kind === "starteammate.generation"
+	) {
 		events.push({ type: "turn_start" });
 	}
 	return events;

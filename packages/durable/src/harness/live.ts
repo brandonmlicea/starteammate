@@ -1,5 +1,5 @@
-import type { Draft, JsonRepresentation, JsonValue } from "@starteammate/chord";
 import type { AssistantMessage, Usage } from "@starteammate/ai";
+import type { Draft, JsonRepresentation, JsonValue } from "@starteammate/chord";
 import { defineDoc } from "../documents.ts";
 import type { Transaction } from "../session/transaction.ts";
 import type {

@@ -392,7 +392,9 @@ export const SettingsSchema = Type.Object(
 			}),
 		),
 		httpProxy: Type.Optional(
-			Type.String({ description: "Proxy URL applied as HTTP_PROXY and HTTPS_PROXY for Starteammate-managed HTTP clients." }),
+			Type.String({
+				description: "Proxy URL applied as HTTP_PROXY and HTTPS_PROXY for Starteammate-managed HTTP clients.",
+			}),
 		),
 		httpIdleTimeoutMs: Type.Optional(
 			timeoutSetting({

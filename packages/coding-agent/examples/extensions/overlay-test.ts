@@ -8,8 +8,8 @@
  * - Edge case tests (wide chars, styled text, emoji)
  */
 
-import type { ExtensionAPI, ExtensionCommandContext, Theme } from "starteammate";
 import { CURSOR_MARKER, type Focusable, matchesKey, renderFakeCursor, visibleWidth } from "@starteammate/tui";
+import type { ExtensionAPI, ExtensionCommandContext, Theme } from "starteammate";
 
 export default function (starteammate: ExtensionAPI) {
 	starteammate.registerCommand("overlay-test", {

@@ -1,7 +1,6 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Context } from "@starteammate/chord";
 import {
 	type AssistantMessage,
 	fauxAssistantMessage,
@@ -10,6 +9,7 @@ import {
 	type ToolResultMessage,
 	Type,
 } from "@starteammate/ai";
+import type { Context } from "@starteammate/chord";
 import {
 	type AgentEvent,
 	defineExtension,
@@ -502,7 +502,9 @@ describe("nested tool calls across a restart", () => {
 				if (change.type !== "task" || change.value.kind !== ToolTask.definition.name) continue;
 				if ((change.value.input as ToolTaskInput).kind !== "model" || change.value.state.status !== "terminal")
 					continue;
-				const live = publication.changes.find((each) => each.type === "document" && each.record.kind === "starteammate.live");
+				const live = publication.changes.find(
+					(each) => each.type === "document" && each.record.kind === "starteammate.live",
+				);
 				const value = live?.type === "document" ? (live.value as { nestedTools?: unknown[] } | null) : undefined;
 				slotsAfterCaller = value?.nestedTools?.length ?? 0;
 			}

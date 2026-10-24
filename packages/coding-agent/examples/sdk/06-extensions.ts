@@ -13,12 +13,7 @@
  *   export default function (starteammate: ExtensionAPI) { ... }
  */
 
-import {
-	createAgentSession,
-	DefaultResourceLoader,
-	getAgentDir,
-	SessionManager,
-} from "starteammate";
+import { createAgentSession, DefaultResourceLoader, getAgentDir, SessionManager } from "starteammate";
 
 // Extensions are discovered automatically from standard locations.
 // You can also add paths via settings.json or DefaultResourceLoader options.

@@ -41,9 +41,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Api, Model } from "@starteammate/ai";
+import { Container, Key, type SelectItem, SelectList, Text } from "@starteammate/tui";
 import type { ExtensionAPI, ExtensionContext } from "starteammate";
 import { CONFIG_DIR_NAME, DynamicBorder, getAgentDir } from "starteammate";
-import { Container, Key, type SelectItem, SelectList, Text } from "@starteammate/tui";
 
 // Preset configuration
 interface Preset {

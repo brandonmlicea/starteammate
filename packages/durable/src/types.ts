@@ -1,6 +1,6 @@
+import type { Message, Models } from "@starteammate/ai";
 import type { Context, Draft, JsonValue, WatchHandle } from "@starteammate/chord";
 import type { Op } from "@starteammate/chord/delta";
-import type { Message, Models } from "@starteammate/ai";
 import type { TelemetryCarrier } from "@starteammate/telemetry";
 import type { ExecutionEnv } from "./env/index.ts";
 import type {

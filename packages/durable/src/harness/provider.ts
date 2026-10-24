@@ -1,5 +1,5 @@
-import type { Context } from "@starteammate/chord";
 import { uuidv7 } from "@starteammate/ai/utils/uuid";
+import type { Context } from "@starteammate/chord";
 import { defineDoc } from "../documents.ts";
 import type { TaskRuntime } from "../types.ts";
 

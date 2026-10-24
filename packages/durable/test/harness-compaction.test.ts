@@ -456,7 +456,11 @@ describe("manual compaction", () => {
 		const placed = await (await chat.harness.submission(submissionId!, context))!.wait(context);
 		expect(placed.status).toBe("done");
 		// The summary follows the answer; the kept range still includes the busy turn.
-		expect((await kinds(chat.root)).slice(-3)).toEqual(["starteammate.user", "starteammate.assistant", "starteammate.compaction"]);
+		expect((await kinds(chat.root)).slice(-3)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+			"starteammate.compaction",
+		]);
 		await chat.harness.close(context);
 	});
 
@@ -568,7 +572,11 @@ describe("manual compaction", () => {
 		answerGate.resolve();
 		expect((await input.wait(context)).status).toBe("done");
 		expect((await submission.wait(context)).status).toBe("done");
-		expect((await kinds(chat.root)).slice(-3)).toEqual(["starteammate.user", "starteammate.assistant", "starteammate.compaction"]);
+		expect((await kinds(chat.root)).slice(-3)).toEqual([
+			"starteammate.user",
+			"starteammate.assistant",
+			"starteammate.compaction",
+		]);
 		await chat.harness.close(context);
 	});
 
@@ -1091,7 +1099,11 @@ describe("blocking threshold compaction", () => {
 		gate.resolve();
 		expect((await input.wait(context)).status).toBe("done");
 		expect((await result(chat, child!.id as TaskId<CompactionResult>)).status).toBe("completed");
-		expect((await kinds(chat.root)).slice(-3)).toEqual(["starteammate.compaction", "starteammate.system", "starteammate.assistant"]);
+		expect((await kinds(chat.root)).slice(-3)).toEqual([
+			"starteammate.compaction",
+			"starteammate.system",
+			"starteammate.assistant",
+		]);
 		const request = chat.faux.agentRequests.at(-1)!.messages;
 		expect(firstUserText(request)).toContain("SUMMARY");
 		const systems = request.filter((message) => message.role === "system");
@@ -1391,7 +1403,9 @@ describe("compaction estimates and interactions", () => {
 		chat.faux.summaries.push(summary());
 		await result(chat, await chat.root.compact(undefined, context));
 		// The kept range holds the delta for the terse mood; the next request has one complete baseline.
-		expect((await chat.root.context(context)).entries.some((record) => record.kind === "starteammate.system")).toBe(true);
+		expect((await chat.root.context(context)).entries.some((record) => record.kind === "starteammate.system")).toBe(
+			true,
+		);
 		await turn(chat, "next", "ok");
 		const systems = chat.faux.agentRequests.at(-1)!.messages.filter((message) => message.role === "system");
 		expect(systems).toHaveLength(1);
@@ -1777,7 +1791,11 @@ describe("compaction recovery", () => {
 		chat.faux.summaries.push(summary());
 		chat.faux.agent.push(answer("a4"));
 		expect((await (await chat.harness.submission(input.id, context))!.wait(context)).status).toBe("done");
-		expect((await kinds(chat.root)).slice(-3)).toEqual(["starteammate.compaction", "starteammate.system", "starteammate.assistant"]);
+		expect((await kinds(chat.root)).slice(-3)).toEqual([
+			"starteammate.compaction",
+			"starteammate.system",
+			"starteammate.assistant",
+		]);
 		await chat.harness.close(context);
 	});
 
@@ -2243,7 +2261,12 @@ describe("blocking and manual compaction together", () => {
 		expect(firstUserText(request)).toContain("SUMMARY");
 		expect(request.map(userText)).toContain("u5");
 		const tail = (await allEntries(chat.root)).slice(-4).map((record) => record.kind);
-		expect(tail).toEqual(["starteammate.compaction", "starteammate.user", "starteammate.system", "starteammate.assistant"]);
+		expect(tail).toEqual([
+			"starteammate.compaction",
+			"starteammate.user",
+			"starteammate.system",
+			"starteammate.assistant",
+		]);
 		await chat.harness.close(context);
 	});
 });

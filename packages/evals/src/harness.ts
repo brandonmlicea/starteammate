@@ -58,14 +58,15 @@ export type StarteammateCodingAgentHarnessOptions = {
 	expectedStarteammateDocumentation?: boolean;
 };
 
-export type StarteammateCodingAgentHarnessWithOutput<TOutput extends JsonValue> = StarteammateCodingAgentHarnessOptions & {
-	output: (args: {
-		response: string;
-		session: AgentSession;
-		systemPrompt: string;
-		agentDir: string;
-	}) => TOutput | Promise<TOutput>;
-};
+export type StarteammateCodingAgentHarnessWithOutput<TOutput extends JsonValue> =
+	StarteammateCodingAgentHarnessOptions & {
+		output: (args: {
+			response: string;
+			session: AgentSession;
+			systemPrompt: string;
+			agentDir: string;
+		}) => TOutput | Promise<TOutput>;
+	};
 
 export function resolveModelSelection(
 	explicitModel: StarteammateCodingAgentModelSelection | undefined,
@@ -74,7 +75,9 @@ export function resolveModelSelection(
 	const provider = (explicitModel?.provider ?? environment.STARTEAMMATE_PROVIDER)?.trim();
 	const id = (explicitModel?.id ?? environment.STARTEAMMATE_MODEL)?.trim();
 	if (!provider || !id) {
-		throw new Error("Select a harness model explicitly or set both STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL as defaults.");
+		throw new Error(
+			"Select a harness model explicitly or set both STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL as defaults.",
+		);
 	}
 	return { provider, id };
 }
@@ -471,7 +474,9 @@ async function runStarteammateCodingAgent<TOutput extends JsonValue>(
 export function createStarteammateCodingAgentHarness<TOutput extends JsonValue>(
 	options: StarteammateCodingAgentHarnessWithOutput<TOutput>,
 ): Harness<StarteammateCodingAgentInput, TOutput>;
-export function createStarteammateCodingAgentHarness(options?: StarteammateCodingAgentHarnessOptions): Harness<StarteammateCodingAgentInput, string>;
+export function createStarteammateCodingAgentHarness(
+	options?: StarteammateCodingAgentHarnessOptions,
+): Harness<StarteammateCodingAgentInput, string>;
 export function createStarteammateCodingAgentHarness<TOutput extends JsonValue>(
 	options: StarteammateCodingAgentHarnessOptions | StarteammateCodingAgentHarnessWithOutput<TOutput> = {},
 ): Harness<StarteammateCodingAgentInput, string | TOutput> {
@@ -495,11 +500,14 @@ export function excludeStarteammateDocumentation(defaultPrompt: string): string 
 	const documentationStartMarker = "\n<docs>\n";
 	const documentationEndMarker = "\n</docs>";
 	const documentationStart = defaultPrompt.indexOf(documentationStartMarker);
-	if (documentationStart === -1) throw new Error("Default Starteammate system prompt has no Starteammate documentation section.");
+	if (documentationStart === -1)
+		throw new Error("Default Starteammate system prompt has no Starteammate documentation section.");
 	const documentationEnd = defaultPrompt.indexOf(documentationEndMarker, documentationStart);
-	if (documentationEnd === -1) throw new Error("Default Starteammate system prompt has no complete Starteammate documentation section.");
+	if (documentationEnd === -1)
+		throw new Error("Default Starteammate system prompt has no complete Starteammate documentation section.");
 	const cwdStart = defaultPrompt.lastIndexOf("\n<cwd>\n");
-	if (cwdStart < documentationEnd) throw new Error("Default Starteammate system prompt has no working-directory section.");
+	if (cwdStart < documentationEnd)
+		throw new Error("Default Starteammate system prompt has no working-directory section.");
 	return (
 		defaultPrompt.slice(0, documentationStart) + defaultPrompt.slice(documentationEnd + documentationEndMarker.length)
 	);

@@ -1,5 +1,5 @@
-import { withTelemetry } from "@starteammate/chord/context";
 import { fauxAssistantMessage, fauxToolCall, Type } from "@starteammate/ai";
+import { withTelemetry } from "@starteammate/chord/context";
 import { CodemodeSandbox } from "@starteammate/codemode";
 import {
 	CompactionTask,
@@ -94,7 +94,10 @@ describe("Durable telemetry", () => {
 		const inner = phases.find((span) => span.attributes["tool.name"] === "inner")!;
 		expect(inner.parentContext).toEqual(outer.context);
 		expect(outer.attributes).toMatchObject({ phase: "call", outcome: "done", "tool.call_id": "call-1" });
-		expect(outer.events).toContainEqual({ name: "starteammate.durable.checkpoint", attributes: { phase: "execute" } });
+		expect(outer.events).toContainEqual({
+			name: "starteammate.durable.checkpoint",
+			attributes: { phase: "execute" },
+		});
 		expect(phases.some((span) => span.attributes.outcome === "waiting")).toBe(true);
 		expect(submit.events).toContainEqual({
 			name: "starteammate.durable.entry",
@@ -117,7 +120,9 @@ describe("Durable telemetry", () => {
 			expect(recorded).not.toContain(content);
 		await harness.close(context);
 		const metrics = telemetry.getMetrics();
-		expect(metrics.filter((metric) => metric.name === "starteammate.durable.phase.duration")).toHaveLength(phases.length);
+		expect(metrics.filter((metric) => metric.name === "starteammate.durable.phase.duration")).toHaveLength(
+			phases.length,
+		);
 		expect(
 			metrics
 				.filter((metric) => metric.name === "starteammate.durable.tasks.active")
@@ -326,7 +331,9 @@ describe("Durable telemetry", () => {
 		expect(tasks.items[1]).toMatchObject({ trace: secondTrace, links: [thirdTrace] });
 		const phases = telemetry
 			.getSpans()
-			.filter((span) => span.name === "starteammate.durable.phase" && span.attributes["task.id"] === tasks.items[1]!.id);
+			.filter(
+				(span) => span.name === "starteammate.durable.phase" && span.attributes["task.id"] === tasks.items[1]!.id,
+			);
 		expect(phases.map((span) => span.attributes.phase)).toEqual(["prepare", "request"]);
 		for (const phase of phases) expect(phase.links).toEqual([{ context: thirdTrace, attributes: {} }]);
 		await harness.close(context);
@@ -354,7 +361,9 @@ describe("Durable telemetry", () => {
 		const { harness, root } = await openTracked(new MemoryStorage(), setup, telemetry);
 		const first = await root.submit({ type: "input", content: "first" }, context);
 		await reached.promise;
-		const run = (await harness.inspect(context)).tasks.find((task) => task.record.kind === "starteammate.generation")!.record;
+		const run = (await harness.inspect(context)).tasks.find(
+			(task) => task.record.kind === "starteammate.generation",
+		)!.record;
 		const steer = await root.submit({ type: "input", content: "steer", whenBusy: "steer" }, context);
 		const steerTrace = (await steer.status(context)).trace;
 		const steerSpan = telemetry.getSpans().find((span) => span.attributes["submission.id"] === steer.id)!;
@@ -397,7 +406,10 @@ describe("Durable telemetry", () => {
 				attributes: { result: "done" },
 			});
 			expect(record.trace).toEqual(span.context);
-			expect(span.events.map((event) => event.name)).toEqual(["starteammate.durable.entry", "starteammate.durable.submission"]);
+			expect(span.events.map((event) => event.name)).toEqual([
+				"starteammate.durable.entry",
+				"starteammate.durable.submission",
+			]);
 		});
 		await harness.close(context);
 	});
@@ -451,12 +463,17 @@ describe("Durable telemetry", () => {
 				kind: "starteammate.user",
 				model: [{ role: "user", content: "x".repeat(400), timestamp: 1 }],
 			});
-			await tx.appendEntry(root.id, { kind: "starteammate.assistant", model: [fauxAssistantMessage("y".repeat(400))] });
+			await tx.appendEntry(root.id, {
+				kind: "starteammate.assistant",
+				model: [fauxAssistantMessage("y".repeat(400))],
+			});
 		}, context);
 		await (await root.submit({ type: "input", content: "z".repeat(400) }, context)).wait(context);
 		await harness.waitForIdle(context);
 		await waitFor(() =>
-			telemetry.getSpans().some((span) => span.attributes["task.name"] === "starteammate.compaction" && span.settled),
+			telemetry
+				.getSpans()
+				.some((span) => span.attributes["task.name"] === "starteammate.compaction" && span.settled),
 		);
 		const spans = telemetry.getSpans();
 		const prepare = spans.find(
@@ -580,14 +597,19 @@ describe("Durable telemetry", () => {
 		});
 		const { harness, root } = await openTracked(storage, setup, telemetry);
 		await root.commit(async (tx) => {
-			await tx.appendEntry(root.id, { kind: "starteammate.user", model: [{ role: "user", content: "old", timestamp: 1 }] });
+			await tx.appendEntry(root.id, {
+				kind: "starteammate.user",
+				model: [{ role: "user", content: "old", timestamp: 1 }],
+			});
 			await tx.appendEntry(root.id, { kind: "starteammate.assistant", model: [fauxAssistantMessage("answer")] });
 		}, context);
 		const id = await root.compact(undefined, context);
 		await waitFor(() => held !== undefined);
 		await held!.entered;
 		expect(telemetry.getSpans().some((span) => span.name === "starteammate.durable.submit")).toBe(false);
-		expect(telemetry.getSpans().find((span) => span.attributes["task.name"] === "starteammate.compaction")).toMatchObject({
+		expect(
+			telemetry.getSpans().find((span) => span.attributes["task.name"] === "starteammate.compaction"),
+		).toMatchObject({
 			settled: false,
 			events: [],
 		});
@@ -599,7 +621,9 @@ describe("Durable telemetry", () => {
 		expect(spans.some((span) => span.name === "starteammate.durable.submit")).toBe(false);
 		expect(phase.events.some((event) => event.name === "starteammate.durable.entry")).toBe(true);
 		expect(
-			phase.events.some((event) => event.name === "starteammate.durable.submission" && event.attributes.status === "done"),
+			phase.events.some(
+				(event) => event.name === "starteammate.durable.submission" && event.attributes.status === "done",
+			),
 		).toBe(true);
 		expect(JSON.stringify(spans)).not.toContain("private-summary");
 		await harness.close(context);
@@ -890,7 +914,10 @@ describe("Durable telemetry", () => {
 		await waitFor(() => telemetry.getSpans().every((span) => span.settled));
 		expect(setup.reports).toEqual([error]);
 		const span = telemetry.getSpans().find((span) => span.name === "starteammate.durable.submit")!;
-		expect(span.events).toContainEqual({ name: "starteammate.durable.report", attributes: { type: "listener_error" } });
+		expect(span.events).toContainEqual({
+			name: "starteammate.durable.report",
+			attributes: { type: "listener_error" },
+		});
 		expect(JSON.stringify(telemetry.getSpans())).not.toContain("private-listener-error");
 		unsubscribe();
 		await harness.close(context);

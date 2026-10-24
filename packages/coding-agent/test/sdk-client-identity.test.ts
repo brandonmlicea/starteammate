@@ -8,8 +8,8 @@ import {
 	getAttributionHeaders,
 	type Model,
 	normalizeContext,
-	STARTEAMMATE_ATTRIBUTION,
 	type SimpleStreamOptions,
+	STARTEAMMATE_ATTRIBUTION,
 } from "@starteammate/ai";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { VERSION } from "../src/config.ts";

@@ -268,7 +268,8 @@ export function createLlamaProvider(): LlamaProviderController {
 			const refreshed = await Promise.all(
 				selectable.filter(isChatModel).map(async (model) => {
 					const cachedContextWindow = cachedContextWindows.get(model.id);
-					if (model.status.value !== "loaded") return toStarteammateModel(model, serverUrl, undefined, cachedContextWindow);
+					if (model.status.value !== "loaded")
+						return toStarteammateModel(model, serverUrl, undefined, cachedContextWindow);
 					const props = await client.props({ model: model.id, signal: context.signal });
 					return toStarteammateModel(model, serverUrl, props, cachedContextWindow);
 				}),

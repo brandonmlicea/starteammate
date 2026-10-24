@@ -73,7 +73,8 @@ function parseEvalCli(args: readonly string[], environment: NodeJS.ProcessEnv = 
 	} else {
 		provider = environment.STARTEAMMATE_PROVIDER?.trim() || undefined;
 		model = environment.STARTEAMMATE_MODEL?.trim() || undefined;
-		if (Boolean(provider) !== Boolean(model)) throw new Error("Set both STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL, or neither.");
+		if (Boolean(provider) !== Boolean(model))
+			throw new Error("Set both STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL, or neither.");
 	}
 
 	const configuredRuns = (runsText ?? environment.STARTEAMMATE_EVAL_RUNS_PER_VARIANT)?.trim();
@@ -112,7 +113,8 @@ function compareDiscovery(left: readonly DiscoveredEvalCase[], right: readonly D
 }
 
 const cli = parseEvalCli(process.argv.slice(2));
-if (!cli.provider || !cli.model) throw new Error("Set STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL, or pass --provider and --model.");
+if (!cli.provider || !cli.model)
+	throw new Error("Set STARTEAMMATE_PROVIDER and STARTEAMMATE_MODEL, or pass --provider and --model.");
 const selectedModel = { provider: cli.provider, model: cli.model };
 const modelIdentity = `${selectedModel.provider}/${selectedModel.model}`;
 const files = (

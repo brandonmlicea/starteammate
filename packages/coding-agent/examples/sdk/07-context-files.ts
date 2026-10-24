@@ -4,12 +4,7 @@
  * Context files provide project-specific instructions loaded into the system prompt.
  */
 
-import {
-	createAgentSession,
-	DefaultResourceLoader,
-	getAgentDir,
-	SessionManager,
-} from "starteammate";
+import { createAgentSession, DefaultResourceLoader, getAgentDir, SessionManager } from "starteammate";
 
 // Disable context files entirely by returning an empty list in agentsFilesOverride.
 const loader = new DefaultResourceLoader({

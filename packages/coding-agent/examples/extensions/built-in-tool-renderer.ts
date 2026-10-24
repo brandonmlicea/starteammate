@@ -25,6 +25,7 @@
  *   starteammate -e ./built-in-tool-renderer.ts
  */
 
+import { Text } from "@starteammate/tui";
 import type { BashToolDetails, EditToolDetails, ExtensionAPI, ReadToolDetails } from "starteammate";
 import {
 	createBashToolDefinition,
@@ -32,7 +33,6 @@ import {
 	createReadToolDefinition,
 	createWriteToolDefinition,
 } from "starteammate";
-import { Text } from "@starteammate/tui";
 
 export default function (starteammate: ExtensionAPI) {
 	const cwd = process.cwd();

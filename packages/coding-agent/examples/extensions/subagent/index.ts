@@ -19,6 +19,7 @@ import * as path from "node:path";
 import type { AgentToolResult, ThinkingLevel } from "@starteammate/agent-core";
 import type { Message } from "@starteammate/ai";
 import { StringEnum } from "@starteammate/ai";
+import { Container, Markdown, Spacer, Text } from "@starteammate/tui";
 import {
 	CONFIG_DIR_NAME,
 	type ExtensionAPI,
@@ -27,7 +28,6 @@ import {
 	getMarkdownTheme,
 	withFileMutationQueue,
 } from "starteammate";
-import { Container, Markdown, Spacer, Text } from "@starteammate/tui";
 import { Type } from "typebox";
 import { type AgentConfig, type AgentScope, discoverAgents } from "./agents.ts";
 

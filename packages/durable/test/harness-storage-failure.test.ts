@@ -1,6 +1,6 @@
 import { runInNewContext } from "node:vm";
-import type { Context } from "@starteammate/chord";
 import { createModels } from "@starteammate/ai";
+import type { Context } from "@starteammate/chord";
 import {
 	createRegistry,
 	defineExtension,

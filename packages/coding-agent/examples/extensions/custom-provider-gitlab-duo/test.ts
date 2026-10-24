@@ -9,9 +9,9 @@
  */
 
 import { type Api, type Context, type Model, registerApiProvider, streamSimple } from "@starteammate/ai/compat";
-import { getAgentDir } from "starteammate";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { getAgentDir } from "starteammate";
 import { MODELS, streamGitLabDuo } from "./index.ts";
 
 const MODEL_MAP = new Map(MODELS.map((m) => [m.id, m]));

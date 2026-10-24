@@ -146,17 +146,21 @@ function createStarteammateMessagesResponseError(
 ): StarteammateMessagesResponseError {
 	const errorBody = parseStarteammateMessagesErrorBody(body);
 	const code = typeof errorBody?.error?.code === "string" ? errorBody.error.code : undefined;
-	return new StarteammateMessagesResponseError(formatStarteammateMessagesResponseError(response, body, errorBody), code, {
-		version: 1,
-		provider: model.provider,
-		model: model.id,
-		url: url.toString(),
-		status: response.status,
-		statusText: response.statusText,
-		...(errorBody?.error === undefined ? {} : { error: errorBody.error as JsonValue }),
-		...(errorBody ? {} : { body: truncateDiagnosticString(body) }),
-		timestampMs: Date.now(),
-	});
+	return new StarteammateMessagesResponseError(
+		formatStarteammateMessagesResponseError(response, body, errorBody),
+		code,
+		{
+			version: 1,
+			provider: model.provider,
+			model: model.id,
+			url: url.toString(),
+			status: response.status,
+			statusText: response.statusText,
+			...(errorBody?.error === undefined ? {} : { error: errorBody.error as JsonValue }),
+			...(errorBody ? {} : { body: truncateDiagnosticString(body) }),
+			timestampMs: Date.now(),
+		},
+	);
 }
 
 function createEmptyUsage(): StarteammateMessagesUsage {
@@ -170,7 +174,10 @@ function createEmptyUsage(): StarteammateMessagesUsage {
 	};
 }
 
-function appendRewriteDiagnostic(message: AssistantMessage, rewrite: StarteammateMessagesRewriteImpact | undefined): void {
+function appendRewriteDiagnostic(
+	message: AssistantMessage,
+	rewrite: StarteammateMessagesRewriteImpact | undefined,
+): void {
 	if (!rewrite) {
 		return;
 	}
@@ -282,7 +289,9 @@ function createEventConverter(model: Model<"starteammate-messages">) {
 	};
 }
 
-async function* readStarteammateMessagesEvents(stream: ReadableStream<Uint8Array>): AsyncGenerator<StarteammateMessagesEvent> {
+async function* readStarteammateMessagesEvents(
+	stream: ReadableStream<Uint8Array>,
+): AsyncGenerator<StarteammateMessagesEvent> {
 	const decoder = new TextDecoder();
 	const reader = stream.getReader();
 	let buffer = "";
@@ -329,7 +338,11 @@ function parseStarteammateMessagesEvent(raw: string): StarteammateMessagesEvent 
 	return data && data !== "[DONE]" ? (JSON.parse(data) as StarteammateMessagesEvent) : undefined;
 }
 
-function createErrorEvent(model: Model<"starteammate-messages">, error: unknown, aborted: boolean): AssistantMessageEvent {
+function createErrorEvent(
+	model: Model<"starteammate-messages">,
+	error: unknown,
+	aborted: boolean,
+): AssistantMessageEvent {
 	const reason = aborted ? "aborted" : "error";
 	const assistantMessage: AssistantMessage = {
 		role: "assistant",

@@ -1,7 +1,7 @@
-import type { Context, Draft } from "@starteammate/chord";
 import type { AssistantMessage, Message, ModelThinkingLevel, SimpleStreamOptions } from "@starteammate/ai";
 import { calculateContextTokens, estimateMessageTokens } from "@starteammate/ai/utils/estimate";
 import { isRetryableAssistantError, retryDelayMs } from "@starteammate/ai/utils/retry";
+import type { Context, Draft } from "@starteammate/chord";
 import { CompactionEntry } from "../entries.ts";
 import { defineTask } from "../tasks.ts";
 import type {

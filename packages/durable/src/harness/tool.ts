@@ -1,3 +1,5 @@
+import type { ImageContent, TextContent, ToolCall, ToolResultMessage } from "@starteammate/ai";
+import { validateToolArguments } from "@starteammate/ai/utils/validation";
 import { type Context, copyJson, type Draft, type JsonRepresentation, type JsonValue } from "@starteammate/chord";
 import { awaitWithContext } from "@starteammate/chord/context";
 import { overlap, ownedSlice } from "@starteammate/chord/delta";
@@ -9,8 +11,6 @@ import {
 	Progress,
 	type ProgressClock,
 } from "@starteammate/chord/output";
-import type { ImageContent, TextContent, ToolCall, ToolResultMessage } from "@starteammate/ai";
-import { validateToolArguments } from "@starteammate/ai/utils/validation";
 import { Compile } from "typebox/compile";
 import { defineDocFamily } from "../documents.ts";
 import { AssistantEntry, ToolResultEntry } from "../entries.ts";

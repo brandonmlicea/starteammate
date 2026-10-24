@@ -1,5 +1,3 @@
-import type { Context, JsonValue } from "@starteammate/chord";
-import { withAbortSignal, withoutAbortSignal } from "@starteammate/chord/context";
 import type { Models } from "@starteammate/ai";
 import {
 	type ClientIdentity,
@@ -7,6 +5,8 @@ import {
 	STARTEAMMATE_ATTRIBUTION,
 	withClientIdentity,
 } from "@starteammate/ai/utils/identity";
+import type { Context, JsonValue } from "@starteammate/chord";
+import { withAbortSignal, withoutAbortSignal } from "@starteammate/chord/context";
 import {
 	createTypedMetrics,
 	NOOP_TELEMETRY_CONTEXT,

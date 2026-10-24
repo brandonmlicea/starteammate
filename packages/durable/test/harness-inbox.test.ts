@@ -1,7 +1,6 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Op } from "@starteammate/chord/delta";
 import {
 	type AssistantMessage,
 	type FauxResponseStep,
@@ -12,6 +11,7 @@ import {
 	Type,
 	type Usage,
 } from "@starteammate/ai";
+import type { Op } from "@starteammate/chord/delta";
 import {
 	type Conversation,
 	defineDoc,
@@ -284,7 +284,11 @@ describe("inbox", () => {
 		await input.wait(context);
 		await harness.waitForIdle(context);
 		expect(await status(input)).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(root))).toEqual(["starteammate.user:a", "starteammate.assistant:first", "starteammate.reset:handoff"]);
+		expect(transcript(await allEntries(root))).toEqual([
+			"starteammate.user:a",
+			"starteammate.assistant:first",
+			"starteammate.reset:handoff",
+		]);
 		expect((await root.context(context)).messages).toEqual([
 			{ role: "user", content: "handoff", timestamp: expect.any(Number) },
 		]);
@@ -516,7 +520,12 @@ describe("inbox", () => {
 		const entries = await allEntries(root);
 		const calling = entries.find((entry) => entry.kind === "starteammate.assistant")!;
 		expect(settled).toMatchObject({ status: "done", answer: calling.id });
-		expect(transcript(entries)).toEqual(["starteammate.user:a", "starteammate.assistant", "starteammate.tool-result", "starteammate.reset:continue here"]);
+		expect(transcript(entries)).toEqual([
+			"starteammate.user:a",
+			"starteammate.assistant",
+			"starteammate.tool-result",
+			"starteammate.reset:continue here",
+		]);
 		expect(setup.faux.state.callCount).toBe(1);
 		expect(await harness.snapshot(LiveDoc, root.id, context)).toEqual({});
 		await harness.close(context);
@@ -606,7 +615,10 @@ describe("inbox", () => {
 		opened = await openChat(await openNodeSqliteStorage(path), setup);
 		const settled = await (await opened.harness.submission(f, context))!.wait(context);
 		expect(settled).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(opened.root)).slice(-2)).toEqual(["starteammate.user:f", "starteammate.assistant:f"]);
+		expect(transcript(await allEntries(opened.root)).slice(-2)).toEqual([
+			"starteammate.user:f",
+			"starteammate.assistant:f",
+		]);
 		await opened.harness.close(context);
 	});
 
@@ -708,7 +720,11 @@ describe("inbox", () => {
 		await input.wait(context);
 		await harness.waitForIdle(context);
 		expect(await status(input)).toMatchObject({ status: "done" });
-		expect(transcript(await allEntries(root))).toEqual(["starteammate.user:a", "starteammate.assistant:first", "starteammate.reset"]);
+		expect(transcript(await allEntries(root))).toEqual([
+			"starteammate.user:a",
+			"starteammate.assistant:first",
+			"starteammate.reset",
+		]);
 		expect(setup.faux.state.callCount).toBe(1);
 		await harness.close(context);
 	});
@@ -759,7 +775,11 @@ describe("inbox", () => {
 		const steer = await root.submit({ type: "input", content: "s", whenBusy: "steer" }, context);
 		const settled = await steer.wait(context);
 		expect(await status(f)).toMatchObject({ status: "done", answer: settled.status === "done" && settled.answer });
-		expect(transcript(await allEntries(root)).slice(-3)).toEqual(["starteammate.user:f", "starteammate.user:s", "starteammate.assistant:both"]);
+		expect(transcript(await allEntries(root)).slice(-3)).toEqual([
+			"starteammate.user:f",
+			"starteammate.user:s",
+			"starteammate.assistant:both",
+		]);
 		await harness.close(context);
 	});
 

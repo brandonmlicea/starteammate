@@ -42,7 +42,8 @@ describe("AgentSessionRuntime characterization", () => {
 		options?: { cwd?: string; bootstrapModel?: boolean; bootstrapThinkingLevel?: boolean },
 	) {
 		const tempDir =
-			options?.cwd ?? join(tmpdir(), `starteammate-runtime-suite-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+			options?.cwd ??
+			join(tmpdir(), `starteammate-runtime-suite-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(tempDir, { recursive: true });
 
 		const faux = registerFauxProvider({
@@ -315,7 +316,10 @@ describe("AgentSessionRuntime characterization", () => {
 		expect(runtime.session.sessionFile).toBe(originalSessionFile);
 
 		events.length = 0;
-		const otherDir = join(tmpdir(), `starteammate-runtime-other-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const otherDir = join(
+			tmpdir(),
+			`starteammate-runtime-other-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
 		mkdirSync(otherDir, { recursive: true });
 		const otherSession = SessionManager.create(otherDir);
 		otherSession.appendMessage({ role: "user", content: [{ type: "text", text: "other" }], timestamp: Date.now() });
@@ -429,7 +433,10 @@ describe("AgentSessionRuntime characterization", () => {
 	});
 
 	it("duplicates the current active branch in-memory when forking at the current position", async () => {
-		const tempDir = join(tmpdir(), `starteammate-runtime-suite-in-memory-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const tempDir = join(
+			tmpdir(),
+			`starteammate-runtime-suite-in-memory-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
 		mkdirSync(tempDir, { recursive: true });
 
 		const faux = registerFauxProvider({
@@ -546,8 +553,14 @@ describe("AgentSessionRuntime characterization", () => {
 	});
 
 	it("updates the runtime session cwd on cross-cwd session replacement", async () => {
-		const firstDir = join(tmpdir(), `starteammate-runtime-cwd-a-${Date.now()}-${Math.random().toString(36).slice(2)}`);
-		const secondDir = join(tmpdir(), `starteammate-runtime-cwd-b-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		const firstDir = join(
+			tmpdir(),
+			`starteammate-runtime-cwd-a-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
+		const secondDir = join(
+			tmpdir(),
+			`starteammate-runtime-cwd-b-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+		);
 		mkdirSync(firstDir, { recursive: true });
 		mkdirSync(secondDir, { recursive: true });
 		const { runtime, faux, tempDir } = await createRuntimeForTest(() => {}, { cwd: firstDir });
