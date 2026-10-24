@@ -11,8 +11,8 @@ const outputDir = join(codingAgentDir, "install-lock");
 const rootLockfilePath = join(repoRoot, "package-lock.json");
 const outputPackageJsonPath = join(outputDir, "package.json");
 const outputLockfilePath = join(outputDir, "package-lock.json");
-const internalPackagePrefix = "@earendil-works/starteammate-";
-const internalPackageNames = new Set(["@starteammate/chord"]);
+const internalPackagePrefix = "@starteammate/";
+const internalPackageNames = new Set(["starteammate", "@starteammate/chord"]);
 const installPackageName = "starteammate-install";
 const allowedInstallScriptPackages = new Map([
 	["@google/genai@2.21.0", "preinstall is a no-op in the published package"],
